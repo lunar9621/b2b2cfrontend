@@ -20,7 +20,7 @@ class Login extends Component {
   };
   handleSubmit = (err, values) => {
     const { type } = this.state;
-
+  console.log("entersubmit");
     if (!err) {
       const { dispatch } = this.props;
       dispatch({

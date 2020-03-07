@@ -1,16 +1,16 @@
-import {queryListMakeSource,queryListSetting} from '@/services/apilistMake';
-const TodosModel = {
-  namespace: 'listMakeModel',
+import {queryCoopList} from '@/services/apilist';
+const ManageListModel = {
+  namespace: 'ManageListModel',
   state: {
-    dataSource: {
-      success:"",
-      msg:"",
-      obj:{}, 
-    },
-    listSetting:{
-      success:"",
-      msg:"",
-      obj:{},
+    dataList: {
+      success: "",
+      msg: "",
+      obj: {
+          rows: [],
+          pageSize: null,
+          pageNumber: null,
+          total: null,
+      },
     },
     datachange:{
       success:"",
@@ -19,14 +19,15 @@ const TodosModel = {
     loading:true,
   },
   effects: {
-    *fetchListMakeSource({payload,callback}, { call, put}) {
+    *fetchCoopList({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
         payload:true,
       })
-      const data = yield call(queryListMakeSource,payload); 
+      console.log("entermodel",payload);
+      const data = yield call(queryCoopList,payload); 
       yield put({
-        type: 'saveDataSource',
+        type: 'saveDataList',
         payload: data,
       });
       yield put({
@@ -69,7 +70,6 @@ const TodosModel = {
       })
       if(callback) callback();
     },
-    
   },
   reducers: {
     dataLoading(state,{payload}){
@@ -79,10 +79,10 @@ const TodosModel = {
       };
     },
 
-    saveDataSource(state, { payload }) {
+    saveDataList(state, { payload }) {
       return {
         ...state,
-        dataSource: payload,
+        dataList: payload,
       };
     },
 
@@ -101,4 +101,4 @@ const TodosModel = {
     }
   },
 };
-export default TodosModel;
+export default ManageListModel;

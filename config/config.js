@@ -55,6 +55,7 @@ const plugins = [
       autoAddMenu: true,
     },
   ],
+ 
 ];
 
 if (isAntDesignProPreview) {
@@ -137,33 +138,44 @@ export default {
             {
               name: '配置中心',
               icon: 'smile',
-              path: '/ConfigureCenter',
+              path:'/ConfigureCenter',
               routes: [
                 {
                   name:'页面配置',
-                  path: '/PageConfigure',
-                  authority: ['admin', 'user'],
+                  path:'PageConfigure',
                   routes: [
                     {
-                      name:'列表页配置',
-                      path: '/ListMakeHome',
+                      name:'列表页配置首页',
+                      path: '/ConfigureCenter/PageConfigure/ListMakeHome',
                       component:'./PageConfigure/ListMakeHome',
                     },
                     {
-                      name:'详情页配置',
-                      path: '/DetailMakeHome',
+                      name:'详情页配置首页',
+                      path: '/ConfigureCenter/PageConfigure/DetailMakeHome',
                       component:'./PageConfigure/DetailMakeHome',
                     },
                     {
-                      name:'编辑页配置',
-                      path: '/EditMakeHome',
+                      name:'编辑页配置首页',
+                      path: '/ConfigureCenter/PageConfigure/EditMakeHome',
                       component:'./PageConfigure/EditMakeHome',
                     },
-                   
+                    {
+                      path: '/ConfigureCenter/PageConfigure/ListMake',
+                      component:'./PageConfigure/ListMake',
+                    },
+                    {
+                      path: '/ConfigureCenter/PageConfigure/DetailMake',
+                      component:'./PageConfigure/DetailMake',
+                    },
+                    {
+                      path: '/ConfigureCenter/PageConfigure/EditMake',
+                      component:'./PageConfigure/EditMake',
+                    },
+                    {
+                      path: '/ConfigureCenter/PageConfigure/ListMakePreview',
+                      component:'./PageConfigure/ListMakePreview',
+                    },
                   ],
-                },
-                {
-                  component: './404',
                 },
               ],
             },

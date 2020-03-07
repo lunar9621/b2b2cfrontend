@@ -274,6 +274,7 @@ class TableForm extends Component {
 
   render() {
     const { loading, data } = this.state;
+    console.log("rendertable");
     return (
       <Fragment>
         <Table

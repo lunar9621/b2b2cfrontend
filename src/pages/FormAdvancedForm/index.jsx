@@ -123,6 +123,7 @@ class FormAdvancedForm extends Component {
       form: { getFieldDecorator },
       submitting,
     } = this.props;
+    console.log("renderform");
     return (
       <>
         <PageHeaderWrapper content="高级表单常见于一次性输入和提交大批量数据的场景。">
