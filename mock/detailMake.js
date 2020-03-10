@@ -14,21 +14,24 @@ function getFakeCaptcha(req, res) {
             total: null,
         },
      },
-    '/api/listMake/queryListMakeSource':{
+    '/api/detailMake/queryDetailMakeSource':{
         success:true,
         msg:"成功",
         obj:{
-            fieldValue:[{name:"supplierName",type:"string"},{name:"Operator",type:"string"},{name:"Date",type:"Date"},{name:"status",type:"enum",options:[0,1,2]}],
-            otherOpe:[],
+            detailData:[{name:"供应商基本信息",type:"object",field:[{name:"name",type:"string",component:""},{name:"description",type:"string",component:""},{name:"creator",type:"string",component:""},{name:"createTime",type:"date",component:""}]},
+                        {name:"供应商属性信息",type:"array",field:[{name:"name",type:"string",component:""},{name:"creator",type:"string",component:""},{name:"createTime",type:"date",component:""}]},
+                        {name:"供应商信息",type:"array",field:[{name:"name",type:"string",component:""},{name:"ID",type:"string",component:""}]},],
+                      
+            specialEvent:[],
         },
     },
-    '/api/listMake/queryListSetting':{
+    '/api/listMake/queryDetailSetting':{
         success:true,
         msg:"成功",
         obj:{
- renderFormSetting:[],
- columnSetting:[],
-        },
+          ButtonSetting:[],
+          SourceSetting:[]
+        }
     },
     'POST /api/login/account': (req, res) => {
       const { password, userName, type } = req.body;

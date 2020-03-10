@@ -13,7 +13,7 @@ export default class ListMakeHome extends Component {
         <PageHeaderWrapper content="请选择要配置的模块">
         <Card>
         <Link to={{ pathname: "DetailMake", query: { id: 2} }} style={{marginRight:50}}>
-            <Button type="primary" >部门管理列表页</Button >
+            <Button type="primary" >部门管理详情页</Button >
         </Link>
         <Link to={{ pathname: "DetailMake", query: { id: 3} }} style={{marginRight:50}}>
             <Button type="primary" >合作方管理详情页</Button >

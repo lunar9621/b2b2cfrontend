@@ -1,13 +1,13 @@
-import {queryListMakeSource,queryListSetting} from '@/services/apilistMake';
-const listMakeModel = {
-  namespace: 'listMakeModel',
+import {queryDetailMakeSource,queryDetailSetting} from '@/services/apidetailMake';
+const detailMakeModel = {
+  namespace: 'detailMakeModel',
   state: {
     dataSource: {
       success:"",
       msg:"",
       obj:{}, 
     },
-    listSetting:{
+    detailSetting:{
       success:"",
       msg:"",
       obj:{},
@@ -19,12 +19,12 @@ const listMakeModel = {
     loading:true,
   },
   effects: {
-    *fetchListMakeSource({payload,callback}, { call, put}) {
+    *fetchDetailMakeSource({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
         payload:true,
       })
-      const data = yield call(queryListMakeSource,payload); 
+      const data = yield call(queryDetailMakeSource,payload); 
       yield put({
         type: 'saveDataSource',
         payload: data,
@@ -36,14 +36,14 @@ const listMakeModel = {
       if(callback) callback();
     },
 
-    *fetchListSetting({payload,callback}, { call, put}) {
+    *fetchDetailSetting({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
         payload:true,
       })
-      const data = yield call(queryListSetting,payload); 
+      const data = yield call(queryDetailSetting,payload); 
       yield put({
-        type: 'saveListSetting',
+        type: 'saveDetailSetting',
         payload: data,
       });
       yield put({
@@ -86,10 +86,10 @@ const listMakeModel = {
       };
     },
 
-    saveListSetting(state, { payload }) {
+    saveDetailSetting(state, { payload }) {
       return {
         ...state,
-        listSetting: payload,
+        detailSetting: payload,
       };
     },
 
@@ -101,4 +101,4 @@ const listMakeModel = {
     }
   },
 };
-export default listMakeModel;
+export default detailMakeModel;
