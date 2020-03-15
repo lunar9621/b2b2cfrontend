@@ -295,7 +295,7 @@ console.log("-------------onchange",onChange);
           onClick={this.newMember}
         >
           <PlusOutlined />
-          新增列表项
+          新增描述列表项
         </Button>
       </Fragment>
     );

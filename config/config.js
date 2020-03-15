@@ -175,6 +175,10 @@ export default {
                       path: '/ConfigureCenter/PageConfigure/ListMakePreview',
                       component:'./PageConfigure/ListMakePreview',
                     },
+                    {
+                      path: '/ConfigureCenter/PageConfigure/DetailMakePreview',
+                      component:'./PageConfigure/DetailMakePreview',
+                    },
                   ],
                 },
               ],
