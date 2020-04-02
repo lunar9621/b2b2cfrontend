@@ -1,8 +1,8 @@
 import { Alert, Checkbox, Icon } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
-import { Link } from 'umi';
 import { connect } from 'dva';
+import { Link ,router} from 'umi';
 import LoginComponents from './components/Login';
 import styles from './style.less';
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
@@ -13,6 +13,22 @@ class Login extends Component {
     type: 'account',
     autoLogin: true,
   };
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'login/getWhetherLogin',
+      callback: () => {
+        console.log("props");
+        console.log(this.props);
+        const {  whetherLogin:{obj,success} } = this.props;
+        if(success){
+          if(!obj){
+           router.push({ pathname: '/welcome'});
+          }
+        }
+      },
+    });
+  }
   changeAutoLogin = e => {
     this.setState({
       autoLogin: e.target.checked,

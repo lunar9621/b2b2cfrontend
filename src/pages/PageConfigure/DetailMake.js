@@ -90,10 +90,19 @@ class DetailMake extends Component {
             })(<Select
             >
               <Option value="vertical">竖排</Option>
-              <Option value="horizon">横排</Option>
+              <Option value="horizontal">横排</Option>
             </Select>)
           }
         </FormItem>
+        {getFieldValue(`itemLayout${index}`)=="horizontal"? <FormItem
+          label="每行列数"
+        >
+          {
+            getFieldDecorator(`column${index}`, {
+              rules: [{ required: true, message: '请选择' }],
+            })(<InputNumber />)
+          }
+        </FormItem>:<span/>}
         <FormItem
           label="列表项设置"
         >
@@ -215,6 +224,7 @@ class DetailMake extends Component {
             tmpSet.listItemSet=JSON.parse(JSON.stringify(values['listItemSet'+index]));
             tmpSet.bordered=values['bordered'+index];
             tmpSet.itemLayout=values['itemLayout'+index];
+            tmpSet.column=values['column'+index];
            }else if(values['detailDataDisplay'+index]=="description"){
             for(let j in values['descriptionsItemSet'+index]){
               delete values['descriptionsItemSet'+index][j].key;
@@ -274,7 +284,7 @@ class DetailMake extends Component {
       dataSource: { detailData, specialEvent }, detailSetting: { ButtonSetting, SourceSetting },loading
     } = this.props;
     const { sourceOption } = this.state;
-    console.log("renderstate",this.state,"renderprops",this.props);
+    console.log("detailrenderstate",this.state,"detailrenderprops",this.props);
     let { getFieldValue, getFieldDecorator } = this.props.form;
 
     let loadSetting = SourceSetting && SourceSetting.length > 0 ? SourceSetting.map(item => <Card></Card>) : <span />;

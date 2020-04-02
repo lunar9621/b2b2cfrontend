@@ -1,0 +1,131 @@
+import React, { PureComponent } from 'react';
+import {Card, Table, Button, Radio, Popconfirm, Divider, message,Form,Select,Input} from 'antd';
+import { connect } from 'dva';
+import ManageEdit from '../../components/ManageEdit';
+import localStorageDB from 'localstoragedb';
+
+
+
+@Form.create()
+class UserEdit extends PureComponent {
+
+  state = {  
+    roleList:[],
+    editSetting:[],
+  };
+  componentDidMount() {
+    const { dispatch } = this.props;
+    const { isEnabled } = this.state;
+    const values = {
+      isEnabled,
+    };
+    let db=new localStorageDB("myDB",localStorage);
+    let result=db.queryAll("EditSetting", {
+      query: {moduleID: 0}
+    });
+    console.log("userdbqueryresult",result);
+    if(!result[0].timestamp){
+    dispatch({
+        type: 'editMakeModel/fetchEditSetting',
+        payload:0,
+        callback:()=>{
+          let {editSetting}=this.props;
+          db.insertOrUpdate("EditSetting",{moduleID:0},{setting:editSetting});
+          this.setState({
+            editSetting,
+          })     
+        }
+      });
+    }
+      dispatch({
+        type: 'editMakeModel/fetchEditTimestamp',
+        payload:0,
+        callback:()=>{
+          let {editTimestamp:{timestamp}}=this.props;
+          db.insertOrUpdate("EditSetting",{moduleID:0},{timestamp:timestamp});
+          if(timestamp==result[0].timestamp){
+            this.setState({
+              editSetting:result[0].setting,
+            })
+          }else if(result[0].timestamp!=''){
+            dispatch({
+              type: 'editMakeModel/fetchEditSetting',
+              payload:0,
+              callback:()=>{
+                let {editSetting}=this.props;
+                db.insertOrUpdate("EditSetting",{moduleID:0},{setting:editSetting});
+                this.setState({
+                  editSetting,
+                })     
+              }
+            });
+          }
+        }
+      });
+    
+    }
+
+
+  render() {
+      console.log("UserEditProps",this.props);
+        let SourceSetting =[{
+            index:0,name:"UserInfo",title:"UserInfo",displayMethod:"Form",
+            FormSet:[
+                {
+                    name: "用户名",
+                    field: "username",
+                    isRequired: "是",
+                    disabled: "",
+                    defaultValue: "",
+                    component: "Input",
+                },
+                {
+                name: "姓名",
+                field: "name",
+                isRequired: "是",
+                disabled: "",
+                defaultValue: "",
+                component: "Input",
+            },
+                {
+            name: "手机号",
+            field: "mobile",
+            isRequired: "是",
+            disabled: "",
+            defaultValue: "",
+            component: "Input",
+        },
+            {
+                name: "角色",
+                field: "role",
+                isRequired: "是",
+                disabled: "",
+                defaultValue: "管理员",
+                component: "Select",
+                options:"admin-管理员#user-普通用户"
+            },
+            {
+                name: "所属机构",
+                field: "department",
+                isRequired: "是",
+                disabled: "",
+                defaultValue: "总公司"
+            }]
+        }]
+        return ( <ManageEdit
+                    dispatchType="ManageEditModel/fetchUserEdit"
+                    SourceSetting={SourceSetting}
+                    initparams={this.props.location.params.EditParam.ID}
+                    isNew={this.props.location.params.isNew}
+                    saveDispatch='ManageEditModel/saveUserEdit'
+                > 
+                    </ManageEdit>
+        )
+}
+}
+
+export default connect(({ editMakeModel }) => ({
+  editSetting: editMakeModel.editSetting.obj,
+  editTimestamp:editMakeModel.editTimestamp.obj,
+  loading: editMakeModel.loading,
+}))(Form.create()(UserEdit))

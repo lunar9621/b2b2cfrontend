@@ -79,6 +79,7 @@ class ListMake extends Component {
            initOption,
            dispatchType,
            id,
+           OtherOpeDispatch:dataSource.otherOpe[values.OtherOpeIndex].dispatchType,
           }
         });
     }
@@ -101,7 +102,7 @@ class ListMake extends Component {
     console.log("dataSource", this.props);
     let otherOpeOptions,initNameOptions,initValueOptions;
     if(dataSource.otherOpe&&dataSource.otherOpe.length>0){
-      otherOpeOptions = loading?[<Option value="null">null</Option>]:dataSource.otherOpe.map((item, index) => <Option value={item}>{item}</Option>);
+      otherOpeOptions = loading?[<Option value="null">null</Option>]:dataSource.otherOpe.map((item, index) => <Option value={item.index}>{item.name}</Option>);
       otherOpeOptions.unshift( <Option value="none">不包含</Option>);
     }
     initNameOptions = loading?[<Option value="null">null</Option>]:dataSource.fieldValue.map((item, index) => <Option value={index}>{item.name}</Option>);
@@ -188,11 +189,12 @@ class ListMake extends Component {
                   }
                 </FormItem>
                 {dataSource.otherOpe&&dataSource.otherOpe.length>0?
+                <div>
                   <FormItem
                   label="包含其他操作"
                 >
                   {
-                    getFieldDecorator('OtherOpe', {
+                    getFieldDecorator('OtherOpeIndex', {
                       rules: [{ required: true, message: '请选择' }],
                     })(<Select
                     > 
@@ -200,18 +202,27 @@ class ListMake extends Component {
                       </Select>)
                   }
                 </FormItem>
+                <FormItem
+                  label="包含其他操作名称"
+                >
+                  {
+                    getFieldDecorator('OtherOpeLabel', {
+                      rules: [{ required: true, message: '请选择' }],
+                    })(<Input/>)
+                  }
+                </FormItem>
+                </div>
                 :
                 <div/>
                 }
               </Card>
           
-              <FooterToolbar>
-            <Button type="primary" htmlType = "submit">预览</Button >
-        </FooterToolbar>
+            <FooterToolbar>
+              <Button type="primary" htmlType = "submit">预览</Button >
+            </FooterToolbar>
         </Form>
   }
-        </PageHeaderWrapper>
-       
+        </PageHeaderWrapper>       
       </>
     );
   }

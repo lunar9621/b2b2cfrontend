@@ -1,16 +1,15 @@
 import React,{Component} from 'react';
 import {connect} from 'dva';
 import {Link } from 'dva/router';
-import { routerRedux, Route, Switch } from 'dva/router';
 import { Table,Row, Col, Card, Form, Icon, Select, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message,Divider, Tooltip,Radio  } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import ManageDetail from '../../components/ManageDetail';
+import ManageEdit from '../../components/ManageEdit';
 import FooterToolbar from '../../components/FooterToolbar';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
 @Form.create()
-export default  class DetailMakePreview  extends Component {
+export default  class EditMakePreview  extends Component {
 
   constructor(props) {
     super(props);
@@ -24,7 +23,7 @@ export default  class DetailMakePreview  extends Component {
        save=()=>{
 
          let params=JSON.parse(JSON.stringify(this.props.location.params));
-         console.log("保存详情页参数",params);
+         console.log("保存编辑页参数",params);
        }
 
   render() {//*************************
@@ -33,17 +32,19 @@ export default  class DetailMakePreview  extends Component {
     return (
       <PageHeaderWrapper >
          <Card bordered={false}>
-            <ManageDetail
+            <ManageEdit
               dispatchType={dispatchType}
               SourceSetting={SourceSetting}
               initparams={initparams}
+              isNew={false}
+              saveDispatch=''
             > 
-            </ManageDetail>
+            </ManageEdit>
             <FooterToolbar>
               <Button onClick={this.save}>
                 保存
               </Button>
-              <Link to={{ pathname: "DetailMake"}}>
+              <Link to={{ pathname: "EditMake"}}>
               <Button>
                 返回
               </Button>

@@ -5,6 +5,7 @@ import { formatMessage } from 'umi-plugin-react/locale';
 import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
+import zhcn from '../../locales/zh-CN'
 import styles from './index.less';
 const ENVTagColor = {
   dev: 'orange',
@@ -43,9 +44,10 @@ const GlobalHeaderRight = props => {
         onPressEnter={() => {}}
       />
       <Tooltip
-        title={formatMessage({
-          id: 'component.globalHeader.help',
-        })}
+        // title={formatMessage({
+        //   id: 'component.globalHeader.help',
+        // })}
+        title={zhcn['app.welcome.link.block-list']}
       >
         <a
           target="_blank"

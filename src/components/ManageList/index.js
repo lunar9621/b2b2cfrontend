@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { routerRedux, Route, Switch } from 'dva/router';
 import {router} from 'umi';
-import { Table, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Divider, Tooltip, Radio } from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber,Popconfirm, DatePicker, Modal, message, Divider, Tooltip, Radio } from 'antd';
 import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './style.less';
@@ -88,7 +88,7 @@ class ManageList extends PureComponent {
     renderForm() {
         const { getFieldDecorator } = this.props.form;
         const {searchForm,loading } =this.props;
-        console.log("ManageListprops",this.props);
+        console.log("ManageListSearchFormprops",this.props);
         return (
             loading?<span/>
             :
@@ -147,45 +147,112 @@ class ManageList extends PureComponent {
           }
         }
     
+    reloadHandler = () => {
+        const { form, dispatch,dispatchType,searchForm } = this.props;
+        const { current, pageSize } = this.props;
+        this.props.form.validateFields((err, values) => {
+        if (err) return;
+        for(let i=0;i<searchForm.length;i++){
+            console.log("searchForm[i].value",searchForm[i].value,values[searchForm[i].value]);
+            if (typeof (values[searchForm[i].value]) == "undefined" || values[searchForm[i].value] == null || values[searchForm[i].value]=== '') delete values[searchForm[i].value];
+            }    
+        values.page=current;
+        values.rows = pageSize;
+        const params = Object.keys(values)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(values[k]))
+        .join('&');
+        dispatch({
+            type:dispatchType,
+            payload: params,
+        });
+        });
+    }
+        
+    deleteHandler = (record) =>{
+        const { dispatch,deleteDispatch} = this.props;
+        const tmpparam= {...record};
+        const params = Object.keys(tmpparam)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(tmpparam[k]))
+        .join('&');
+        dispatch({
+          type: deleteDispatch,
+          payload: params,
+          callback: () => {
+            const { success, msg } = this.props.datachange;
+            if(success){
+              message.success(msg);
+              this.reloadHandler(dispatch);
+            }else{
+              message.error(msg);          
+            }
+          },
+        });    
+    }
+
+    recoverHandler = (record) =>{
+        const { dispatch,recoverDispatch} = this.props;
+        const tmpparam= {...record};
+        const params = Object.keys(tmpparam)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(tmpparam[k]))
+        .join('&');
+        dispatch({
+          type: recoverDispatch,
+          payload: params,
+          callback: () => {
+            const { success, msg } = this.props.datachange;
+            if(success){
+              message.success(msg);
+              this.reloadHandler(dispatch);
+            }else{
+              message.error(msg);          
+            }
+          },
+        });  
+    }
+
+    otherOpeHandler = (record) =>{
+        console.log("enterOtherOpeHandlerrecord",record);
+        const { dispatch,OtherOpeDispatch} = this.props;
+        const tmpparam= {...record};
+        const params = Object.keys(tmpparam)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(tmpparam[k]))
+        .join('&');
+        dispatch({
+          type: OtherOpeDispatch,
+          payload: params,
+          callback: () => {
+            const { success, msg } = this.props.datachange;
+            if(success){
+              message.success(msg);
+              this.reloadHandler(dispatch);
+            }else{
+              message.error(msg);          
+            }
+          },
+        });  
+    }
 
     render() {
         console.log(this.props.storeInfo);
         const rowKey = record => record.id;//控制台不再报warning
-        const {columns,isEdit,isDelete,isView,isRecover, editPath,viewPath,deleteDispatch,recoverDispatch,stateData,sidemenuAuth,match, dataList,loading}= this.props;//需要拿到所有的state
-        console.log("after");
+        const {columns,isEdit,isDelete,isView,isRecover, editPath,viewPath,deleteDispatch,recoverDispatch,stateData,sidemenuAuth,match, dataList,loading,OtherOpeDispatch,OtherOpeLabel}= this.props;
+        console.log("ManageListrender",this.props);
         const nowstate=eval(stateData);
-        let viewOpe=<span/>,editOpe=<span/>,deleteOpe=<span/>,recoverOpe=<span/>;
-        if(isView){
-            if(viewPath==''){
+        let viewOpe=<span/>,editOpe=<span/>,deleteOpe=<span/>,recoverOpe=<span/>,otherOpe=<span/>;
+        if(isView&&viewPath==''){
                 viewOpe=<span style={{marginRight:20}}>查看</span>
-            }else{
-                viewOpe=<Link to={{ pathname: viewPath, params: { id: record.id, isEdit: true } }} style={{marginRight:20}}>查看</Link>
-            }
         }
-        if(isEdit){
-            if(editPath==''){
+        if(isEdit&&editPath==''){
                 editOpe=<span style={{marginRight:20}}>编辑</span>
-            }else{
-                editOpe=<Link to={{ pathname: editPath, params: { id: record.id, isEdit: true } }} style={{marginRight:20}}>编辑</Link>
-            }
         }
-        if(isDelete){
-            if(deleteDispatch==''){
+        if(isDelete&&deleteDispatch==''){
                 deleteOpe=<span style={{marginRight:20}}>删除</span>
-            }else{
-                deleteOpe=<Popconfirm title="确定删除?" onConfirm={this.deleteHandler(deleteDispatch)}>
-                <a style={{marginRight:20}}>删除</a>
-              </Popconfirm>
-            }
         }
-        if(isRecover){
-            if(recoverDispatch==''){
+        if(isRecover&&recoverDispatch==''){
                 recoverOpe=<span style={{marginRight:20}}>恢复</span>
-            }else{
-                recoverOpe=<Popconfirm title="确定恢复?" onConfirm={this.recoverHandler(recoverDispatch)}>
-                <a style={{marginRight:20}}>恢复</a>
-              </Popconfirm>
-            }
+        }
+        if(OtherOpeLabel&&OtherOpeDispatch==''){
+            otherOpe=<span style={{marginRight:20}}>{OtherOpeLabel}</span>
         }
         //const currentUrl = match?match.url:"";
         //const arr = sidemenuAuth.filter(v => currentUrl === v.fullUrl);
@@ -220,13 +287,21 @@ class ManageList extends PureComponent {
         title: '操作',
         key: 'action',
         align: 'center',
-        render: (record) =>  
-             <span>
-                {viewOpe}
-                {editOpe}
-                {deleteOpe}
-                {recoverOpe}
+        render: (record) =>  {
+         return    <span>
+                {viewPath?<Link to={{ pathname: viewPath, params: { ViewParam: record, isEdit: false } }} style={{marginRight:20}}>查看</Link>:viewOpe}
+                {editPath?<Link to={{ pathname: editPath, params: { EditParam: record, isNew: false } }} style={{marginRight:20}}>编辑</Link>:editOpe}
+                {deleteDispatch?<Popconfirm title="确定删除?" onConfirm={this.deleteHandler.bind(null,record)}>
+                <a style={{marginRight:20}}>删除</a>
+              </Popconfirm>:deleteOpe}
+                {recoverDispatch?<Popconfirm title="确定恢复?" onConfirm={this.recoverHandler.bind(null,record)}>
+                <a style={{marginRight:20}}>恢复</a>
+              </Popconfirm>:recoverOpe}
+                {OtherOpeDispatch?<Popconfirm  title="确定进行此操作?" onConfirm={this.otherOpeHandler.bind(null,record)}>
+                <a style={{marginRight:20}}>{OtherOpeLabel}</a>
+              </Popconfirm>:otherOpe}
              </span>
+        }
         
       })
     }
@@ -261,4 +336,5 @@ class ManageList extends PureComponent {
 export default connect(({ ManageListModel }) => ({
     dataList: ManageListModel.dataList,//列表页数据源
     loading: ManageListModel.loading,
+    datachange:ManageListModel.datachange,
   }))(Form.create()(ManageList))

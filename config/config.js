@@ -179,9 +179,63 @@ export default {
                       path: '/ConfigureCenter/PageConfigure/DetailMakePreview',
                       component:'./PageConfigure/DetailMakePreview',
                     },
+                    {
+                      path: '/ConfigureCenter/PageConfigure/EditMakePreview',
+                      component:'./PageConfigure/EditMakePreview',
+                    },
                   ],
                 },
+                {
+                  name:"语言配置",
+                  path:"LocaleConfigure",
+                  routes:[
+                  {
+                  name:'语言配置首页',
+                  path: '/ConfigureCenter/LocaleConfigure/ConfigureHome',
+                  component:'./LocaleConfigure/ConfigureHome',
+                  },
+                ]
+                },
               ],
+            },
+            {
+              path: '/SelfInfo',
+              name: 'SelfInfo',
+              icon: 'smile',
+              routes: [
+                {
+                  path: '/View',
+                  name: '个人中心',
+                  component: './SelfInfo/View',
+                },
+                {
+                  path: '/resetPWD',
+                  component: './SelfInfo/resetPWD',
+                },
+              ],
+             
+            },
+            {
+              path: '/UserAndRole',
+              name:'用户及角色管理',
+              icon: 'smile',
+              routes: [
+                {
+                  path: '/UserAndRole/UserManage',
+                  name: '用户管理',
+                  component: './UserManage/UserList',
+                },
+                {
+                  path: '/UserAndRole/UserManageEdit',
+                  component: './UserManage/UserEdit',
+                },
+                {
+                  path: '/UserAndRole/RoleManage',
+                  name: '角色管理',
+                  component: './RoleManage/RoleList',
+                },
+              ],
+             
             },
             {
               component: './404',

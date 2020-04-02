@@ -14,22 +14,50 @@ function getFakeCaptcha(req, res) {
             total: null,
         },
      },
+     'POST /api/listMake/userManageDelete': (req, res) => {
+      res.send({
+        success: true,
+         msg:"删除用户成功",
+      });
+    },
+     'POST /api/listMake/userManageResetPWD': (req, res) => {
+      res.send({
+        success: true,
+         msg:"密码修改成功",
+      });
+    },
+     '/api/listMake/queryUserList':{
+      success: "",
+      msg: "",
+      obj: {
+          rows: [{ID:"0001",username:"zyhtest1",name:"zyh",mobile:"0000001",role:'admin',department:'部门1'},
+          {ID:"0002",username:"zyhtest1",name:"zyh",mobile:"0000001",role:'user',department:'部门1'}],
+          pageSize: null,
+          pageNumber: null,
+          total: null,
+      },
+   },
     '/api/listMake/queryListMakeSource':{
         success:true,
         msg:"成功",
         obj:{
             fieldValue:[{name:"supplierName",type:"string"},{name:"Operator",type:"string"},{name:"Date",type:"Date"},{name:"status",type:"enum",options:[0,1,2]}],
-            otherOpe:[],
+            otherOpe:[{name:"resetPWD",dispatchType:"ManageListModel/userManageResetPWD"}],
         },
     },
     '/api/listMake/queryListSetting':{
         success:true,
         msg:"成功",
         obj:{
- renderFormSetting:[],
- columnSetting:[],
+        renderFormSetting:[],
+        columnSetting:[],
         },
     },
+    '/api/listMake/queryListTimestamp':{
+      success:true,
+      msg:"成功",
+      obj:{timestamp:'',},
+  },
     'POST /api/login/account': (req, res) => {
       const { password, userName, type } = req.body;
   

@@ -124,7 +124,8 @@ export default  class ListMakePreview  extends PureComponent {
   render() {//*************************
   
     const {searchForm,columns,isEdit,isDelete,isView,isRecover,initOption,editPath,dispatchType}=this.state;
-    console.log("ListPreviewState",this.state);
+    const {OtherOpeIndex,OtherOpeDispatch,OtherOpeLabel}=this.props.location.params;
+    console.log("ListPreviewRenderState",this.state);
     return (
       <PageHeaderWrapper >
          <Card bordered={false}>
@@ -143,6 +144,8 @@ export default  class ListMakePreview  extends PureComponent {
               isDelete={isDelete}
               isView={isView}
               isRecover={isRecover}
+              OtherOpeDispatch={''}
+              OtherOpeLabel={OtherOpeLabel}
             > 
             </ManageList>
             <FooterToolbar>

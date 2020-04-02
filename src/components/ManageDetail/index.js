@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { routerRedux, Route, Switch } from 'dva/router';
 import {router} from 'umi';
-import { Table, Row, Col, Card, Form, Input, Select, List} from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, List,Spin,Descriptions} from 'antd';
 import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './style.less';
@@ -12,7 +12,7 @@ import styles from './style.less';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-class ManageDetail extends PureComponent {
+class ManageDetail extends Component {
     componentDidMount() {
         const {dispatch}=this.props;
         const{ SourceSetting,id,dispatchType,initparams}=this.props;
@@ -27,53 +27,69 @@ class ManageDetail extends PureComponent {
         let {dataDetail,loading}=this.props;
         console.log("renderDetaildataDetail",dataDetail,"renderDetailvalues",values,"loading",loading);
         let data=dataDetail[values.name];
-    if(values.displayMethod=="list"){
-    return loading?<span/>:<List
+    if(values.displayMethod=="list")
+    {
+      console.log("enterlistdata",data);
+      return loading?<Spin/>:values.itemLayout=="vertical"?<List
           bordered={values.bordered}
-          itemLayout={values.itemLayout=="vertival"?"vertical":"horizontal"}
-          >
-              {values.listItemSet.map(
-                 itemtmp=>{
-                 console.log("listItemSetitemtmp",itemtmp);
-                 return <List.item title={itemtmp.name}>{data[itemtmp.field]}</List.item>
-                 }
-              )}
-        </List>
+          dataSource={values.listItemSet}
+          renderItem={item=>(
+          <List.Item > <List.Item.Meta
+          title={item.name}
+          description={data[item.field]}
+        /></List.Item>
+          )}
+          />:<List
+          grid={{ gutter: 16, column: values.column }}
+          bordered={values.bordered}
+          dataSource={values.listItemSet}
+          renderItem={item=>(
+          <List.Item > <List.Item.Meta
+          title={item.name}
+          description={data[item.field]}
+        /></List.Item>
+          )}
+          />
     }else if(values.displayMethod=="description"){
-    return loading?<span/>:<Descriptions
+      console.log("enterdescription");
+      return loading?<span/>:<Descriptions
       bordered={values.bordered}
-      layout={values.itemLayout=="vertival"?"vertical":"horizontal"}
+      layout={values.itemLayout=="vertical"?"vertical":"horizontal"}
       column={values.column}
     >
-      {  values.descriptionsItemSet.map(item=><DescriptionItem label={item.name}>{data[item.field]}</DescriptionItem>)}
+      {  values.descriptionsItemSet.map(item=><Descriptions.Item label={item.name}>{data[item.field]}</Descriptions.Item>)}
     </Descriptions>
     }else{
+      console.log("entertable");
         let columns=[];
        for(let index in values.tableColumnSet){
          let tmpColumn={};
-         tmpColumn.title=values.tableColumnSet[index].title;
+         tmpColumn.title=values.tableColumnSet[index].name;
          tmpColumn.key=values.tableColumnSet[index].field;
          tmpColumn.dataIndex=values.tableColumnSet[index].field;
-         tmpColumn.align=tmpColumn.align=="左"?"left":tmpColumn.align=="中"?"center":"right";
+         tmpColumn.align=values.tableColumnSet[index].align=="左"?"left":values.tableColumnSet[index].align=="居中"?"center":"right";
          columns.push(tmpColumn);
        }
-  return <Table
+       return  <Table
         columns={columns} 
         dataSource={data}
         pagination={false}
         loading={loading}
         bordered
         />
+    
     }
   }
 
     render() {
-        const{ SourceSetting,id,dispatchType,initparams}=this.props;
+        const{ SourceSetting,id,dispatchType,initparams,loading}=this.props;
+        console.log("renderManageDetail",this.props);
         return (
             <PageHeaderWrapper>
-               { SourceSetting.map(item=>{
-                <Card bordered={false} title={item.title}>
-                   {this.renderDetail(item)}
+             {loading?<Spin/>: 
+               SourceSetting.map(item=>{
+              return  <Card bordered={false} title={item.title}>
+                  {this.renderDetail(item)}         
                 </Card>
                })
              }

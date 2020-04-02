@@ -9,7 +9,7 @@ const SelectLang = props => {
   const { className } = props;
   const selectedLang = getLocale();
 
-  const changeLang = ({ key }) => setLocale(key);
+  const changeLang = ({ key }) => {setLocale(key);window.localStorage.locale=key;}
 
   const locales = ['zh-CN', 'zh-TW', 'en-US', 'pt-BR'];
   const languageLabels = {
@@ -17,7 +17,7 @@ const SelectLang = props => {
     'zh-TW': '繁体中文',
     'en-US': 'English',
     'pt-BR': 'Português',
-  };
+  }; 
   const languageIcons = {
     'zh-CN': '🇨🇳',
     'zh-TW': '🇭🇰',

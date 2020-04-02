@@ -1,4 +1,4 @@
-import {queryCoopList} from '@/services/apilist';
+import {queryCoopList,queryUserList,userManageResetPWD,userManageDelete} from '@/services/apilist';
 const ManageListModel = {
   namespace: 'ManageListModel',
   state: {
@@ -17,6 +17,7 @@ const ManageListModel = {
       msg:"",
     },
     loading:true,
+    submitLoading: false,
   },
   effects: {
     *fetchCoopList({payload,callback}, { call, put}) {
@@ -54,18 +55,53 @@ const ManageListModel = {
       if(callback) callback();
     },
 
-    *deleteEvent({ payload,callback }, { call,put}) {
+    *fetchUserList({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
         payload:true,
       })
-      const data = yield call(deleteEvent, payload);
+      console.log("entermodel",payload);
+      const data = yield call(queryUserList,payload); 
+      yield put({
+        type: 'saveDataList',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *userManageResetPWD({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(userManageResetPWD, payload);
       yield put({
         type: 'messageCall',
         payload: data,
       });
       yield put({
-        type:'dataLoading',
+        type:'dataSubmitLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *userManageDelete({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(userManageDelete, payload);
+      yield put({
+        type: 'messageCall',
+        payload: data,
+      });
+      yield put({
+        type:'dataSubmitLoading',
         payload:false,
       })
       if(callback) callback();
@@ -76,6 +112,13 @@ const ManageListModel = {
       return {
         ...state,
         loading:payload,
+      };
+    },
+
+    dataSubmitLoading(state,{payload}){
+      return {
+        ...state,
+        submitLoading:payload,
       };
     },
 

@@ -1,18 +1,18 @@
-import {queryListMakeSource,queryListSetting,queryListTimestamp} from '@/services/apilistMake';
-const listMakeModel = {
-  namespace: 'listMakeModel',
+import {queryEditMakeSource,queryEditSetting,queryEditTimestamp} from '@/services/apieditMake';
+const editMakeModel = {
+  namespace: 'editMakeModel',
   state: {
     dataSource: {
       success:"",
       msg:"",
       obj:{}, 
     },
-    listSetting:{
+    editSetting:{
       success:"",
       msg:"",
       obj:{},
     },
-    listTimestamp:{
+    editTimestamp:{
       success:"",
       msg:"",
       obj:{},
@@ -24,12 +24,12 @@ const listMakeModel = {
     loading:true,
   },
   effects: {
-    *fetchListMakeSource({payload,callback}, { call, put}) {
+    *fetchEditMakeSource({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
         payload:true,
       })
-      const data = yield call(queryListMakeSource,payload); 
+      const data = yield call(queryEditMakeSource,payload); 
       yield put({
         type: 'saveDataSource',
         payload: data,
@@ -41,14 +41,14 @@ const listMakeModel = {
       if(callback) callback();
     },
 
-    *fetchListSetting({payload,callback}, { call, put}) {
+    *fetchEditSetting({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
         payload:true,
       })
-      const data = yield call(queryListSetting,payload); 
+      const data = yield call(queryEditSetting,payload); 
       yield put({
-        type: 'saveListSetting',
+        type: 'saveEditSetting',
         payload: data,
       });
       yield put({
@@ -58,14 +58,15 @@ const listMakeModel = {
       if(callback) callback();
     },
 
-    *fetchListTimestamp({payload,callback}, { call, put}) {
+
+    *fetchEditTimestamp({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
         payload:true,
       })
-      const data = yield call(queryListTimestamp,payload); 
+      const data = yield call(queryEditTimestamp,payload); 
       yield put({
-        type: 'saveListTimestamp',
+        type: 'saveEditTimestamp',
         payload: data,
       });
       yield put({
@@ -108,17 +109,17 @@ const listMakeModel = {
       };
     },
 
-    saveListSetting(state, { payload }) {
+    saveEditSetting(state, { payload }) {
       return {
         ...state,
-        listSetting: payload,
+        editSetting: payload,
       };
     },
 
-    saveListTimestamp(state, { payload }) {
+    saveEditTimestamp(state, { payload }) {
       return {
         ...state,
-        listTimestamp: payload,
+        editTimestamp: payload,
       };
     },
 
@@ -130,4 +131,4 @@ const listMakeModel = {
     }
   },
 };
-export default listMakeModel;
+export default editMakeModel;
