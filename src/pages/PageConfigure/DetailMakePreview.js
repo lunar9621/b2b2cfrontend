@@ -15,7 +15,7 @@ export default  class DetailMakePreview  extends Component {
   constructor(props) {
     super(props);
   }
-
+//目前能用合作方管理
  componentDidMount(){
      const{ SourceSetting,id,dispatchType,initparams}=this.props.location.params;
      console.log("didmountvalues",this.props.location.params);

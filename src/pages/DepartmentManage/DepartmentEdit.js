@@ -7,7 +7,7 @@ import localStorageDB from 'localstoragedb';
 
 
 @Form.create()
-class UserEdit extends PureComponent {
+class DepartmentEdit extends PureComponent {
 
   state = {  
     roleList:[],
@@ -30,7 +30,7 @@ class UserEdit extends PureComponent {
         payload:0,
         callback:()=>{
           let {editSetting}=this.props;
-          db.insertOrUpdate("EditSetting",{moduleID:0},{setting:editSetting});
+          db.insertOrUpdate("EditSetting",{moduleID:2},{setting:editSetting});
           this.setState({
             editSetting,
           })     
@@ -42,7 +42,7 @@ class UserEdit extends PureComponent {
         payload:0,
         callback:()=>{
           let {editTimestamp:{timestamp}}=this.props;
-          db.insertOrUpdate("EditSetting",{moduleID:0},{timestamp:timestamp});
+          db.insertOrUpdate("EditSetting",{moduleID:2},{timestamp:timestamp});
           let result=db.queryAll("EditSetting", {
             query: {moduleID: 0}
           });
@@ -57,7 +57,7 @@ class UserEdit extends PureComponent {
               payload:0,
               callback:()=>{
                 let {editSetting}=this.props;
-                db.insertOrUpdate("EditSetting",{moduleID:0},{setting:editSetting});
+                db.insertOrUpdate("EditSetting",{moduleID:2},{setting:editSetting});
                 this.setState({
                   editSetting,
                 })     
@@ -74,57 +74,58 @@ class UserEdit extends PureComponent {
       let{editSetting}=this.state;
       let {isNew}=this.props.location.params;
         let SourceSetting =[{
-            index:0,name:"UserInfo",title:"UserInfo",displayMethod:"Form",
+            index:0,name:"DepartmentInfo",title:"DepartmentInfo",displayMethod:"Form",
             FormSet:[
                 {
-                    name: "用户名",
-                    field: "username",
+                    name: "部门名称",
+                    field: "name",
                     isRequired: "是",
                     disabled: "",
                     defaultValue: "",
                     component: "Input",
                 },
                 {
-                name: "姓名",
-                field: "name",
+                    name: "上级部门",
+                    field: "leadDep",
+                    isRequired: "是",
+                    disabled: "",
+                    defaultValue: "",
+                    component: "Input",
+                },
+                {
+                    name: "部门主管",
+                    field: "manager",
+                    isRequired: "是",
+                    disabled: "",
+                    defaultValue: "",
+                    component: "Input",
+                },
+                {
+                name: "部门人数",
+                field: "count",
                 isRequired: "是",
                 disabled: "",
                 defaultValue: "",
                 component: "Input",
-            },
+                },
                 {
-            name: "手机号",
-            field: "mobile",
-            isRequired: "是",
-            disabled: "",
-            defaultValue: "",
-            component: "Input",
+                    name: "成立时间",
+                    field: "buildTime",
+                    isRequired: "是",
+                    disabled: "",
+                    defaultValue: "",
+                    component: "Input",
+                },
+           ]
         },
-            {
-                name: "角色",
-                field: "role",
-                isRequired: "是",
-                disabled: "",
-                defaultValue: "管理员",
-                component: "Select",
-                options:"admin-管理员#user-普通用户"
-            },
-            {
-                name: "所属机构",
-                field: "department",
-                isRequired: "是",
-                disabled: "",
-                component:"Input",
-                defaultValue: "总公司"
-            }]
-        }]
+    ]
         return ( <ManageEdit
-                    dispatchType="ManageEditModel/fetchUserEdit"
+                    dispatchType="ManageEditModel/fetchDepartmentEdit"
                     SourceSetting={SourceSetting}
                     initparams={isNew?'':this.props.location.params.EditParam.ID}
                     isNew={isNew}
-                    saveEditDispatch='ManageEditModel/saveUserEdit'
-                    saveNewDispatch="ManageEditModel/saveNewUser"
+                    saveEditDispatch='ManageEditModel/saveDepartmentEdit'
+                    saveNewDispatch="ManageEditModel/saveNewDepartment"
                     returnPath="/UserAndRole/UserManage"
                 > 
                     </ManageEdit>
@@ -136,4 +137,4 @@ export default connect(({ editMakeModel }) => ({
   editSetting: editMakeModel.editSetting.obj,
   editTimestamp:editMakeModel.editTimestamp.obj,
   loading: editMakeModel.loading,
-}))(Form.create()(UserEdit))
+}))(Form.create()(DepartmentEdit))

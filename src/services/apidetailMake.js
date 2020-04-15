@@ -6,3 +6,6 @@ export async function queryDetailMakeSource(id) {
 export async function queryDetailSetting(id) {
 return request(`/api/detailMake/queryDetailSetting?id=${id}`);
 }
+export async function queryDetailTimestamp(id) {
+    return request(`/api/detailMake/queryDetailTimestamp?id=${id}`);
+}

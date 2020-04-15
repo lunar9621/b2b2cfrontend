@@ -35,15 +35,16 @@ let db=new localStorageDB("myDB",localStorage);
   if(!db.tableExists("ListSetting")){
   db.createTable("ListSetting",["moduleID","timestamp","setting"]);
   }
-  db.insertOrUpdate("ListSetting", {moduleID: 0, timestamp:'', setting: ''});
+  db.insertOrUpdate("ListSetting", {moduleID:0},{moduleID: 0, timestamp:'', setting: ''});
   if(!db.tableExists("DetailSetting")){
   db.createTable("DetailSetting",["moduleID","timestamp","setting"]);
   }
-  db.insertOrUpdate("DetailSetting", {moduleID: 0, timestamp:'', setting: ''});
+  db.insertOrUpdate("DetailSetting", {moduleID:0},{moduleID: 0, timestamp:'', setting: ''});
   if(!db.tableExists("EditSetting")){
   db.createTable("EditSetting",["moduleID","timestamp","setting"]);
   }
-  db.insertOrUpdate("EditSetting", {moduleID: 0, timestamp:'', setting: ''});
+  db.insertOrUpdate("EditSetting", {moduleID:0},{moduleID: 0, timestamp:'', setting: ''});
+  //db.deleteRows("EditSetting",{ID:2});
   db.commit();
 //}
 let result=db.queryAll("ListSetting", {

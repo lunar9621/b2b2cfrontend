@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { routerRedux, Route, Switch } from 'dva/router';
 import {router} from 'umi';
-import { Table, Row, Col, Card, Form, Input, Select, Radio,Spin,Checkbox,Upload,InputNumber,Button} from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, Radio,Spin,Checkbox,Upload,InputNumber,Button,message} from 'antd';
 import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import DynamicTable from './DynamicTable';
@@ -27,12 +27,14 @@ class ManageEdit extends Component {
   }
     componentDidMount() {
         const {dispatch}=this.props;
-        const{ SourceSetting,id,dispatchType,initparams}=this.props;
+        const{ SourceSetting,id,dispatchType,initparams,isNew}=this.props;
         console.log("ManageEditprops",this.props);
+        if(!isNew){
         dispatch({
             type: dispatchType,
             payload: initparams,
         });
+      }
     }
 
     handleChangeEditor = (content) => {
@@ -161,7 +163,7 @@ class ManageEdit extends Component {
         if(values.displayMethod=="Form")
         {
           console.log("entereditdata",data);
-          return loading?<Spin/>:
+          return loading&&!isNew?<Spin/>:
           values.FormSet.map(item=>{
             switch (item.component){
               case "Input":
@@ -329,20 +331,31 @@ class ManageEdit extends Component {
   }
 
     submitHandler = (e) => {
-      let {saveHandler,saveDispatch}=this.props;
+      let {saveHandler,isNew,saveNewDispatch,saveEditDispatch}=this.props;
+      console.log("entersubmithandler",this.props);
       e.preventDefault();
       this.props.form.validateFields((err, values) => {
         if(err) return;
         if(saveHandler){//外部调用保存方法
           saveHandler(values);
-        }
-        console.log(values);
-        if(saveDispatch!=''){//内部调用保存方法
+        }else if(isNew){//内部调用保存方法
+          console.log("entersaveNewdispatch");
           this.props.dispatch({
-            type: saveDispatch,
+            type: saveNewDispatch,
             payload: values,
             callback: () => {
-              const { success, msg } = this.props.res;
+              const { success, msg } = this.props.datachange;
+              if(success) message.success(msg);
+              else message.error(msg);
+            },
+          })
+      }else{
+        console.log("entersaveEditdispatch");
+          this.props.dispatch({
+            type: saveEditDispatch,
+            payload: values,
+            callback: () => {
+              const { success, msg } = this.props.datachange;
               if(success) message.success(msg);
               else message.error(msg);
             },
@@ -358,17 +371,19 @@ class ManageEdit extends Component {
       })
     }
 
+
     render() {
-        const{ SourceSetting,id,dispatchType,initparams,loading,returnPath}=this.props;
+        const{ SourceSetting,id,dispatchType,initparams,loading,returnPath,isNew}=this.props;
         console.log("renderManageEdit",this.props);
         return (
             <PageHeaderWrapper>
-             {loading?<Spin/>: 
+              <Form onSubmit={this.submitHandler}>
+             {loading&&!isNew?<Spin/>: 
                SourceSetting.map(item=>{
               return  <Card bordered={false} title={item.title}>
-                <Form onSubmit={this.submitHandler}>
+                
                   {this.renderDetail(item)}
-                  </Form>         
+                
                 </Card>
                })
              }
@@ -381,11 +396,13 @@ class ManageEdit extends Component {
                 </FooterToolbar>
                 :<span/>
                }
+               </Form>
             </PageHeaderWrapper>
         );
     }
 }
 export default connect(({ ManageEditModel }) => ({
     dataEdit: ManageEditModel.dataEdit.obj,//详情页数据源
+    datachange:ManageEditModel.datachange,
     loading: ManageEditModel.loading,
 }))(Form.create()(ManageEdit))

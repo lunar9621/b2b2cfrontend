@@ -24,7 +24,7 @@ class UserList extends PureComponent {
     let result=db.queryAll("ListSetting", {
       query: {moduleID: 0}
     });
-    console.log("userdbqueryresult",result);
+    console.log("userdbListSetquery",result);
     if(!result[0].timestamp){
     dispatch({
         type: 'listMakeModel/fetchListSetting',

@@ -79,7 +79,7 @@ class ListMake extends Component {
            initOption,
            dispatchType,
            id,
-           OtherOpeDispatch:dataSource.otherOpe[values.OtherOpeIndex].dispatchType,
+           OtherOpeDispatch:values.OtherOpeIndex=="none"?"":dataSource.otherOpe[values.OtherOpeIndex].dispatchType,
           }
         });
     }
@@ -102,7 +102,7 @@ class ListMake extends Component {
     console.log("dataSource", this.props);
     let otherOpeOptions,initNameOptions,initValueOptions;
     if(dataSource.otherOpe&&dataSource.otherOpe.length>0){
-      otherOpeOptions = loading?[<Option value="null">null</Option>]:dataSource.otherOpe.map((item, index) => <Option value={item.index}>{item.name}</Option>);
+      otherOpeOptions = loading?[<Option value="none">null</Option>]:dataSource.otherOpe.map((item, index) => <Option value={item.index}>{item.name}</Option>);
       otherOpeOptions.unshift( <Option value="none">不包含</Option>);
     }
     initNameOptions = loading?[<Option value="null">null</Option>]:dataSource.fieldValue.map((item, index) => <Option value={index}>{item.name}</Option>);
@@ -202,6 +202,8 @@ class ListMake extends Component {
                       </Select>)
                   }
                 </FormItem>
+                {
+                  getFieldValue("OtherOpeIndex")!="none"?
                 <FormItem
                   label="包含其他操作名称"
                 >
@@ -211,6 +213,9 @@ class ListMake extends Component {
                     })(<Input/>)
                   }
                 </FormItem>
+                :
+                <div/>
+                 }
                 </div>
                 :
                 <div/>

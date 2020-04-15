@@ -24,3 +24,32 @@ export async function userManageDelete(params) {
         data: params,
       });
 }
+
+export async function coopManageDelete(params) {
+    return request('/api/listMake/coopManageDelete', {
+        method: 'POST',
+        data: params,
+      });
+}
+
+export async function queryRoleList(params) {
+    return request(`/api/listMake/queryRoleList?${JSON.stringify(params)}`);
+}
+
+export async function queryDepartmentList(params) {
+    return request(`/api/listMake/queryDepartmentList?${JSON.stringify(params)}`);
+}
+
+export async function roleManageDelete(params) {
+    return request('/api/listMake/roleManageDelete', {
+        method: 'POST',
+        data: params,
+      });
+}
+
+export async function departmentManageDelete(params) {
+    return request('/api/listMake/departmentManageDelete', {
+        method: 'POST',
+        data: params,
+      });
+}

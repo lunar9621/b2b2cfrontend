@@ -1,4 +1,5 @@
-import {queryCoopList,queryUserList,userManageResetPWD,userManageDelete} from '@/services/apilist';
+import {queryCoopList,queryUserList,userManageResetPWD,userManageDelete,queryRoleList,roleManageDelete,
+  queryDepartmentList,departmentManageDelete,coopManageDelete} from '@/services/apilist';
 const ManageListModel = {
   namespace: 'ManageListModel',
   state: {
@@ -96,6 +97,93 @@ const ManageListModel = {
         payload:true,
       })
       const data = yield call(userManageDelete, payload);
+      yield put({
+        type: 'messageCall',
+        payload: data,
+      });
+      yield put({
+        type:'dataSubmitLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *fetchRoleList({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      console.log("entermodel",payload);
+      const data = yield call(queryRoleList,payload); 
+      yield put({
+        type: 'saveDataList',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+     *roleManageDelete({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(roleManageDelete, payload);
+      yield put({
+        type: 'messageCall',
+        payload: data,
+      });
+      yield put({
+        type:'dataSubmitLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *fetchDepartmentList({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      console.log("entermodel",payload);
+      const data = yield call(queryDepartmentList,payload); 
+      yield put({
+        type: 'saveDataList',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *departmentManageDelete({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(departmentManageDelete, payload);
+      yield put({
+        type: 'messageCall',
+        payload: data,
+      });
+      yield put({
+        type:'dataSubmitLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *coopManageDelete({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(coopManageDelete, payload);
       yield put({
         type: 'messageCall',
         payload: data,

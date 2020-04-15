@@ -1,4 +1,4 @@
-import {queryDetailMakeSource,queryDetailSetting} from '@/services/apidetailMake';
+import {queryDetailMakeSource,queryDetailSetting,queryDetailTimestamp} from '@/services/apidetailMake';
 const detailMakeModel = {
   namespace: 'detailMakeModel',
   state: {
@@ -8,6 +8,11 @@ const detailMakeModel = {
       obj:{}, 
     },
     detailSetting:{
+      success:"",
+      msg:"",
+      obj:{},
+    },
+    detailTimestamp:{
       success:"",
       msg:"",
       obj:{},
@@ -53,6 +58,23 @@ const detailMakeModel = {
       if(callback) callback();
     },
 
+    *fetchDetailTimestamp({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      const data = yield call(queryDetailTimestamp,payload); 
+      yield put({
+        type: 'saveDetailTimestamp',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
     *deleteEvent({ payload,callback }, { call,put}) {
       yield put({
         type:'dataLoading',
@@ -83,6 +105,13 @@ const detailMakeModel = {
       return {
         ...state,
         dataSource: payload,
+      };
+    },
+
+    saveDetailTimestamp(state, { payload }) {
+      return {
+        ...state,
+        detailTimestamp: payload,
       };
     },
 

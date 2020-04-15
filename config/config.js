@@ -188,32 +188,19 @@ export default {
                 {
                   name:"语言配置",
                   path:"LocaleConfigure",
-                  routes:[
-                  {
-                  name:'语言配置首页',
-                  path: '/ConfigureCenter/LocaleConfigure/ConfigureHome',
                   component:'./LocaleConfigure/ConfigureHome',
-                  },
-                ]
                 },
               ],
             },
             {
               path: '/SelfInfo',
-              name: 'SelfInfo',
+              name: '个人中心',
               icon: 'smile',
-              routes: [
-                {
-                  path: '/View',
-                  name: '个人中心',
-                  component: './SelfInfo/View',
-                },
-                {
-                  path: '/resetPWD',
-                  component: './SelfInfo/resetPWD',
-                },
-              ],
-             
+              component: './SelfInfo/View',
+            },
+            {
+              path: '/SelfInfo/resetPWD',
+              component: './SelfInfo/resetPWD',
             },
             {
               path: '/UserAndRole',
@@ -234,8 +221,82 @@ export default {
                   name: '角色管理',
                   component: './RoleManage/RoleList',
                 },
+                {
+                  path: '/UserAndRole/RoleManageEdit',
+                  component: './RoleManage/RoleEdit',
+                },
+                {
+                  path: '/UserAndRole/RoleManageGrantAuth',
+                  component: './RoleManage/GrantAuth',
+                },
               ],
              
+            },
+            {
+              path: '/DepartmentManage',
+              name:'部门管理',
+              component:'./DepartmentManage/DepartmentList',
+              icon: 'smile',
+            },
+            {
+              path: '/DepartmentManage/Detail',
+              component: './DepartmentManage/DepartmentDetail',
+            },
+            {
+              path: '/DepartmentManage/Edit',
+              component: './DepartmentManage/DepartmentEdit',
+            },
+            {
+              path: '/CoopManage',
+              name:'合作方管理',
+              component:'./CoopManage/CoopList',
+              icon: 'smile',
+            },
+            {
+              path: '/CoopManage/Detail',
+              component: './CoopManage/CoopDetail',
+            },
+            {
+              path: '/CoopManage/Edit',
+              component: './CoopManage/CoopEdit',
+            },
+            {
+              path: '/ContractManage',
+              name:'合同管理',
+              component:'./ContractManage/ContractList',
+              icon: 'smile',
+            },
+            {
+              path: '/ContractManage/Detail',
+              component: './ContractManage/ContractDetail',
+            },
+            {
+              path: '/ContractManage/Edit',
+              component: './ContractManage/ContractEdit',
+            },
+            {
+              path: '/ContractManage',
+              name:'合同管理',
+              component:'./ContractManage/ContractList',
+              icon: 'smile',
+            },
+            {
+              path: '/ContractManage/Detail',
+              component: './ContractManage/ContractDetail',
+            },
+            {
+              path: '/ContractManage/Edit',
+              component: './ContractManage/ContractEdit',
+            },
+            {
+              path: '/CheckManage',
+              name:'审核管理',
+              component:'./CheckManage/CheckList',
+              icon: 'smile',
+            },
+            {
+              path: '/CheckManage/Audit',
+              component: './CheckManage/CheckAudit',
             },
             {
               component: './404',

@@ -1,11 +1,89 @@
 import request from '@/utils/request';
 //queryListMakeSource,queryListSetting
 export async function queryUserEdit(params){
-    return request(`/api/editMake/queryUserEdit?${JSON.stringify(params)}`);
+    return request(`/api/editMake/queryUserEdit?ID=${JSON.stringify(params)}`);
 }
 
 export async function saveUserEdit(params) {
     return request('/api/editMake/saveUserEdit', {
+        method: 'POST',
+        data: params,
+      });
+}
+
+export async function saveNewUser(params) {
+    return request('/api/editMake/saveNewUser', {
+        method: 'POST',
+        data: params,
+      });
+}
+//RoleManage
+export async function queryRoleEdit(params){
+    return request(`/api/editMake/queryRoleEdit?ID=${params}`);
+}
+
+
+export async function saveRoleEdit(params) {
+    return request('/api/editMake/saveRoleEdit', {
+        method: 'POST',
+        data: params,
+      });
+}
+
+export async function saveNewRole(params) {
+    return request('/api/editMake/saveNewRole', {
+        method: 'POST',
+        data: params,
+      });
+}
+
+export async function queryAuthTree(params) {
+    return request('/api/editMake/queryAuthTree', {
+        method: 'POST',
+        data: params,
+      });
+}
+
+export async function submitAuth(params) {
+    return request('/api/editMake/submitAuth', {
+        method: 'POST',
+        data: params,
+      });
+}
+//DepartmentManage
+export async function queryDepartmentEdit(params){
+    return request(`/api/editMake/queryDepartmentEdit?ID=${params}`);
+}
+
+
+export async function saveDepartmentEdit(params) {
+    return request('/api/editMake/saveDepartmentEdit', {
+        method: 'POST',
+        data: params,
+      });
+}
+
+export async function saveNewDepartment(params) {
+    return request('/api/editMake/saveNewDepartment', {
+        method: 'POST',
+        data: params,
+      });
+}
+//CoopManage
+export async function queryCoopEdit(params){
+    return request(`/api/editMake/queryCoopEdit?ID=${params}`);
+}
+
+
+export async function saveCoopEdit(params) {
+    return request('/api/editMake/saveCoopEdit', {
+        method: 'POST',
+        data: params,
+      });
+}
+
+export async function saveNewCoop(params) {
+    return request('/api/editMake/saveNewCoop', {
         method: 'POST',
         data: params,
       });

@@ -21,9 +21,12 @@ class ManageList extends PureComponent {
         };
         console.log("ManageLkistprops",this.props)
         Object.assign(param,initOption);
+        const val = Object.keys(param)
+      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(param[k]))
+      .join('&');
         dispatch({
             type: dispatchType,
-            payload: param,
+            payload: val,
         });
     }
 
@@ -143,6 +146,9 @@ class ManageList extends PureComponent {
         if(editPath!=''){
             router.push({
                 pathname: editPath,
+                params: {
+                   isNew:true,
+                    }
               });
           }
         }
@@ -235,10 +241,11 @@ class ManageList extends PureComponent {
     render() {
         console.log(this.props.storeInfo);
         const rowKey = record => record.id;//控制台不再报warning
-        const {columns,isEdit,isDelete,isView,isRecover, editPath,viewPath,deleteDispatch,recoverDispatch,stateData,sidemenuAuth,match, dataList,loading,OtherOpeDispatch,OtherOpeLabel}= this.props;
+        const {columns,isEdit,isDelete,isView,isRecover, editPath,viewPath,deleteDispatch,recoverDispatch,stateData,sidemenuAuth,match, dataList,loading,OtherOpeDispatch,OtherOpeLabel,
+            OtherRouteLabel,OtherRoutePath}= this.props;
         console.log("ManageListrender",this.props);
         const nowstate=eval(stateData);
-        let viewOpe=<span/>,editOpe=<span/>,deleteOpe=<span/>,recoverOpe=<span/>,otherOpe=<span/>;
+        let viewOpe=<span/>,editOpe=<span/>,deleteOpe=<span/>,recoverOpe=<span/>,otherOpe=<span/>,otherRoute=<span/>;
         if(isView&&viewPath==''){
                 viewOpe=<span style={{marginRight:20}}>查看</span>
         }
@@ -253,6 +260,9 @@ class ManageList extends PureComponent {
         }
         if(OtherOpeLabel&&OtherOpeDispatch==''){
             otherOpe=<span style={{marginRight:20}}>{OtherOpeLabel}</span>
+        }
+        if(OtherRouteLabel&&OtherRoutePath==''){
+            otherRoute=<span style={{marginRight:20}}>{OtherRouteLabel}</span>
         }
         //const currentUrl = match?match.url:"";
         //const arr = sidemenuAuth.filter(v => currentUrl === v.fullUrl);
@@ -300,6 +310,8 @@ class ManageList extends PureComponent {
                 {OtherOpeDispatch?<Popconfirm  title="确定进行此操作?" onConfirm={this.otherOpeHandler.bind(null,record)}>
                 <a style={{marginRight:20}}>{OtherOpeLabel}</a>
               </Popconfirm>:otherOpe}
+        {OtherRoutePath?<Link to={{ pathname: OtherRoutePath, params: { routeParam: record } }} style={{marginRight:20}}>{OtherRouteLabel}</Link>
+        :otherRoute}
              </span>
         }
         
