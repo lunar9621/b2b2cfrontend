@@ -7,7 +7,7 @@ import localStorageDB from 'localstoragedb';
 
 
 @Form.create()
-class ContractList extends PureComponent {
+class CheckList extends PureComponent {
 
   state = {  
     roleList:[],

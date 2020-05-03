@@ -70,6 +70,13 @@ function getFakeCaptcha(req, res) {
       }
       },
     },
+    '/api/detailMake/queryCoopDetail':{
+      success: "",
+      msg: "",
+      obj: {
+         CoopInfo:[{supplierName:"供应商1",Operator:"zyh",Date:"2019-02-11"},{name:"gong2",ID:"01010015"},{name:"gong3",ID:"01010016"},],
+      },
+   },
     'POST /api/login/account': (req, res) => {
       const { password, userName, type } = req.body;
   

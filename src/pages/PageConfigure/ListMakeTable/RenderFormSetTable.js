@@ -25,7 +25,8 @@ class RenderFormSetTable extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    let {value}=props;
+     this.state = {
       data: props.value,
       loading: false,
       value: props.value,

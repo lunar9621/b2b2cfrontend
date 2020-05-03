@@ -85,7 +85,8 @@ function getFakeCaptcha(req, res) {
         msg:"成功",
         obj:{
             fieldValue:[{name:"supplierName",type:"string"},{name:"Operator",type:"string"},{name:"Date",type:"Date"},{name:"status",type:"enum",options:[0,1,2]}],
-            otherOpe:[{name:"resetPWD",dispatchType:"ManageListModel/userManageResetPWD"}],
+            otherOpe:[{index:0,name:"resetPWD",dispatchType:"ManageListModel/userManageResetPWD"}],
+            otherRoute:[],
         },
     },
     '/api/listMake/queryListSetting':{

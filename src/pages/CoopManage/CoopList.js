@@ -22,13 +22,13 @@ class CoopList extends PureComponent {
     };
     let db=new localStorageDB("myDB",localStorage);
     let result=db.queryAll("ListSetting", {
-      query: {moduleID: 0}
+      query: {moduleID: 3}
     });
     console.log("userdbListSetquery",result);
     if(!result[0].timestamp){
     dispatch({
         type: 'listMakeModel/fetchListSetting',
-        payload:0,
+        payload:3,
         callback:()=>{
           let {listSetting}=this.props;
           db.insertOrUpdate("ListSetting",{moduleID:3},{setting:listSetting});
@@ -71,38 +71,39 @@ class CoopList extends PureComponent {
  
 
   render() {
-    let columns = [
-      {
-        title: '供应商名称',
-        dataIndex: 'supplierName',
-        width: '12%',
-        align: 'center',
-        key: 'supplierName',
-      } ,{
-        title: '创建人',
-        dataIndex: 'Operator',
-        width: '12%',
-        key: 'Operator',
-      }
-    ];
-    let searchForm=[
-        {label: "供应商名称",
-    value: "supplierName",
-    wrapperWidth: 200,
-    type: "input"},
-    {
-    label: "创建日期",
-    value: "Date",
-    wrapperWidth: 200,
-    type: "datePicker",
-    }
-   ];
-let isEdit=true,isDelete=true,isView=true,isRecover=false;
+    console.log("coopmanageprops",this.props);
+    let {columns,searchForm,isEdit,isDelete,isView,isRecover, initOption,OtherOpeDispatch,OtherOpeLabel,
+      OtherRouteLabel,OtherRoutePath}=this.props.listSetting;
+//     let columns = [
+//       {
+//         title: '合作方名称',
+//         dataIndex: 'supplierName',
+//         width: '12%',
+//         align: 'center',
+//         key: 'supplierName',
+//       } ,{
+//         title: '创建人',
+//         dataIndex: 'Operator',
+//         width: '12%',
+//         key: 'Operator',
+//       }
+//     ];
+//     let searchForm=[
+//         {label: "供应商名称",
+//     value: "supplierName",
+//     wrapperWidth: 200,
+//     type: "input"},
+//     {
+//     label: "创建日期",
+//     value: "Date",
+//     wrapperWidth: 200,
+//     type: "datePicker",
+//     }
+//    ];
+// let isEdit=true,isDelete=true,isView=true,isRecover=false;
    return ( <ManageList
               dispatchType="ManageListModel/fetchCoopList"
-              initOption={{
-                  status:"0"
-              }}
+              initOption={initOption}
               columns={columns}
               stateData="dataList"
               searchForm={searchForm}
@@ -114,6 +115,10 @@ let isEdit=true,isDelete=true,isView=true,isRecover=false;
               isDelete={isDelete}
               isView={isView}
               isRecover={isRecover}
+              otherOpeDispatch={OtherOpeDispatch}
+              otherOpeLabel={OtherOpeLabel}
+      otherRouteLabel={OtherRouteLabel}
+      otherRoutePath={OtherRoutePath}
             > 
             </ManageList>
    )

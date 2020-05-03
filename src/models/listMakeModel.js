@@ -1,4 +1,4 @@
-import {queryListMakeSource,queryListSetting,queryListTimestamp} from '@/services/apilistMake';
+import {queryListMakeSource,queryListSetting,queryListTimestamp,saveListSetting} from '@/services/apilistMake';
 const listMakeModel = {
   namespace: 'listMakeModel',
   state: {
@@ -66,6 +66,23 @@ const listMakeModel = {
       const data = yield call(queryListTimestamp,payload); 
       yield put({
         type: 'saveListTimestamp',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *saveListSetting({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      const data = yield call(saveListSetting, payload);
+      yield put({
+        type: 'messageCall',
         payload: data,
       });
       yield put({

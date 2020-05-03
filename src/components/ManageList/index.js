@@ -90,7 +90,7 @@ class ManageList extends PureComponent {
 
     renderForm() {
         const { getFieldDecorator } = this.props.form;
-        const {searchForm,loading } =this.props;
+        const {searchForm=[],loading } =this.props;
         console.log("ManageListSearchFormprops",this.props);
         return (
             loading?<span/>
@@ -241,7 +241,7 @@ class ManageList extends PureComponent {
     render() {
         console.log(this.props.storeInfo);
         const rowKey = record => record.id;//控制台不再报warning
-        const {columns,isEdit,isDelete,isView,isRecover, editPath,viewPath,deleteDispatch,recoverDispatch,stateData,sidemenuAuth,match, dataList,loading,OtherOpeDispatch,OtherOpeLabel,
+        const {columns=[],isEdit,isDelete,isView,isRecover, editPath,viewPath,deleteDispatch,recoverDispatch,stateData,sidemenuAuth,match, dataList,loading,OtherOpeDispatch,OtherOpeLabel,
             OtherRouteLabel,OtherRoutePath}= this.props;
         console.log("ManageListrender",this.props);
         const nowstate=eval(stateData);
@@ -277,7 +277,7 @@ class ManageList extends PureComponent {
             current,
             total: nowstate.obj.total,
         };
-        if(columns[0].key=='row') {
+        if(columns.length>0&&columns[0].key=='row') {
             columns[0]={
              title: '',
              key: 'row',
@@ -316,6 +316,31 @@ class ManageList extends PureComponent {
         }
         
       })
+    }else{
+        columns[columns.length-1]=
+            {
+            title: '操作',
+            key: 'action',
+            align: 'center',
+            render: (record) =>  {
+             return    <span>
+                    {viewPath?<Link to={{ pathname: viewPath, params: { ViewParam: record, isEdit: false } }} style={{marginRight:20}}>查看</Link>:viewOpe}
+                    {editPath?<Link to={{ pathname: editPath, params: { EditParam: record, isNew: false } }} style={{marginRight:20}}>编辑</Link>:editOpe}
+                    {deleteDispatch?<Popconfirm title="确定删除?" onConfirm={this.deleteHandler.bind(null,record)}>
+                    <a style={{marginRight:20}}>删除</a>
+                  </Popconfirm>:deleteOpe}
+                    {recoverDispatch?<Popconfirm title="确定恢复?" onConfirm={this.recoverHandler.bind(null,record)}>
+                    <a style={{marginRight:20}}>恢复</a>
+                  </Popconfirm>:recoverOpe}
+                    {OtherOpeDispatch?<Popconfirm  title="确定进行此操作?" onConfirm={this.otherOpeHandler.bind(null,record)}>
+                    <a style={{marginRight:20}}>{OtherOpeLabel}</a>
+                  </Popconfirm>:otherOpe}
+            {OtherRoutePath?<Link to={{ pathname: OtherRoutePath, params: { routeParam: record } }} style={{marginRight:20}}>{OtherRouteLabel}</Link>
+            :otherRoute}
+                 </span>
+            }
+            
+          }
     }
     console.log("columnOpe", viewOpe,editOpe,deleteOpe,recoverOpe);
         return (

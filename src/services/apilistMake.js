@@ -1,11 +1,18 @@
 import request from '@/utils/request';
-//queryListMakeSource,queryListSetting,queryListTimestamp
+//queryListMakeSource,queryListSetting,queryListTimestamp,saveListSetting
 export async function queryListMakeSource(id) {
-    return request(`/api/listMake/queryListMakeSource?id=${id}`);
+    return request(`/api/listMake/queryListMakeSource?moduleID=${id}`);
 }
 export async function queryListSetting(id) {
-return request(`/api/listMake/queryListSetting?id=${id}`);
+return request(`/apikoa/listMake/queryListSetting?moduleID=${id}`);
 }
 export async function queryListTimestamp(id) {
-    return request(`/api/listMake/queryListTimestamp?id=${id}`);
+    return request(`/api/listMake/queryListTimestamp?moduleID=${id}`);
 }
+
+export async function saveListSetting(params) {
+    return request('/apikoa/listMake/saveListSetting', {
+      method: 'POST',
+      data: params,
+    });
+  }

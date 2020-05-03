@@ -7,7 +7,7 @@ import localStorageDB from 'localstoragedb';
 
 
 @Form.create()
-class ContractEdit extends PureComponent {
+class CheckAudit extends PureComponent {
 
   state = {  
     roleList:[],
@@ -119,4 +119,4 @@ export default connect(({ editMakeModel }) => ({
   editSetting: editMakeModel.editSetting.obj,
   editTimestamp:editMakeModel.editTimestamp.obj,
   loading: editMakeModel.loading,
-}))(Form.create()(ContractEdit))
+}))(Form.create()(CheckAudit))

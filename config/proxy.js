@@ -14,6 +14,11 @@ export default {
         '^': '',
       },
     },
+    '/apikoa': {
+      target: 'http://localhost:5000',
+      changeOrigin: true,
+      //pathRewrite: { '^/server': '' },
+    },
   },
   test: {
     '/api/': {

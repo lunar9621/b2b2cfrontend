@@ -190,6 +190,11 @@ export default {
                   path:"LocaleConfigure",
                   component:'./LocaleConfigure/ConfigureHome',
                 },
+                {
+                  name:"菜单配置",
+                  path:"MenuConfigure",
+                  component:'./MenuConfigure/MenuConfigureHome',
+                },
               ],
             },
             {
@@ -275,20 +280,6 @@ export default {
               component: './ContractManage/ContractEdit',
             },
             {
-              path: '/ContractManage',
-              name:'合同管理',
-              component:'./ContractManage/ContractList',
-              icon: 'smile',
-            },
-            {
-              path: '/ContractManage/Detail',
-              component: './ContractManage/ContractDetail',
-            },
-            {
-              path: '/ContractManage/Edit',
-              component: './ContractManage/ContractEdit',
-            },
-            {
               path: '/CheckManage',
               name:'审核管理',
               component:'./CheckManage/CheckList',
@@ -297,6 +288,66 @@ export default {
             {
               path: '/CheckManage/Audit',
               component: './CheckManage/CheckAudit',
+            },
+            {
+              path: '/CoopManage',
+              component:'./CoopManage/CoopList',
+              rootKey:'CoopListtmp1',
+              icon: 'smile',
+            },
+            {
+              path: '/CoopManage',
+              component:'./CoopManage/CoopList',
+              rootKey:'CoopListtmp2',
+              icon: 'smile',
+            },
+            {
+              path: '/CoopManage',
+              component:'./CoopManage/CoopList',
+              rootKey:'CoopListtmp3',
+              icon: 'smile',
+            },
+            {
+              path: '/CoopManage',
+              component:'./CoopManage/CoopList',
+              rootKey:'CoopListtmp4',
+              icon: 'smile',
+            },
+            {
+              path: '/CoopManage',
+              component:'./CoopManage/CoopList',
+              rootKey:'CoopListtmp5',
+              icon: 'smile',
+            },
+            {
+              path: '/CheckManage',
+              rootKey:'CheckListtmp1',
+              component:'./CheckManage/CheckList',
+              icon: 'smile',
+            },
+            {
+              path: '/CheckManage',
+              rootKey:'CheckListtmp2',
+              component:'./CheckManage/CheckList',
+              icon: 'smile',
+            },
+            {
+              path: '/CheckManage',
+              rootKey:'CheckListtmp3',
+              component:'./CheckManage/CheckList',
+              icon: 'smile',
+            },
+            {
+              path: '/CheckManage',
+              rootKey:'CheckListtmp4',
+              component:'./CheckManage/CheckList',
+              icon: 'smile',
+            },
+            {
+              path: '/CheckManage',
+              rootKey:'CheckListtmp5',
+              component:'./CheckManage/CheckList',
+              icon: 'smile',
             },
             {
               component: './404',

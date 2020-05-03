@@ -1,6 +1,6 @@
 import React,{PureComponent} from 'react';
 import {connect} from 'dva';
-import {Link } from 'dva/router';
+import { Link, router } from 'umi';
 import { routerRedux, Route, Switch } from 'dva/router';
 import { Table,Row, Col, Card, Form, Icon, Select, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message,Divider, Tooltip,Radio  } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -9,26 +9,30 @@ import FooterToolbar from '../../components/FooterToolbar';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-@Form.create()
-export default  class ListMakePreview  extends PureComponent {
+ class ListMakePreview  extends PureComponent {
 
   constructor(props) {
     super(props);
     this.state = {
-      isRender:false,
       searchForm:[],
       columns:[  {
         title: '',
         dataIndex: '',
         key: '',
     }, ],
-    editPath:'',
     isEdit:false,
     isDelete:false,
     isView:false,
     isRecover:false,
-    otherOpe:null,
+    otherOpeName:'',
+    otherOpeDispatch:'',
+    otherOpeLabel:'',
+    otherRouteName:'',
+    otherRoutePath:'',
+    otherRouteLabel:'',
     dispatchType:this.props.location.params.dispatchType,
+    initOption:{},
+    moduleID:'',
     };
   }
 
@@ -95,36 +99,68 @@ export default  class ListMakePreview  extends PureComponent {
     if(ColumnOpe.indexOf('isRecover')!=-1){
       isRecover=true;
     }
-    let otherOpe=null;
-    if(this.props.location.params.OtherOpe){
-      otherOpe=this.props.location,params.OtherOpe;
+    let otherOpeDispatch="",otherOpeLabel="",otherOpeName="";
+    let otherRoutePath="",otherRouteName="",otherRouteLabel=""
+    if(this.props.location.params.OtherOpeName){
+      otherOpeDispatch=this.props.location.params.OtherOpeDispatch;
+      otherOpeLabel=this.props.location.params.OtherOpeLabel;
+      otherOpeName=this.props.location.params.OtherOpeName;
+    }
+    if(this.props.location.params.OtherRouteName){
+      otherRoutePath=this.props.location.params.OtherRoutePath;
+      otherRouteLabel=this.props.location.params.OtherRouteLabel;
+      otherRouteName=this.props.location.params.OtherRouteName;
     }
     this.setState({
       searchForm,
       columns,
-      isRender:true,
       isEdit,
       isDelete,
       isView,
       isRecover,
-      editPath,
-      otherOpe,
+      otherOpeName,
+      otherOpeDispatch,
+      otherOpeLabel,
+      otherRouteName,
+      otherRoutePath,
+      otherRouteLabel,
       dispatchType,
       initOption,
-      id
+      moduleID:id,
     });
        }
 
        save=()=>{
-
-         let params=JSON.parse(JSON.stringify(this.state));
-         console.log("保存参数",params);
+             console.log("savehandlerprops",this.props);
+             
+             let {dispatch}=this.props;
+             let params=JSON.parse(JSON.stringify(this.state));
+             delete params.dispatchType;
+             console.log("列表页保存参数",params);
+             dispatch({
+              type: 'listMakeModel/saveListSetting',
+              payload: params,
+              callback: () =>　{
+                const { success, msg } = this.props.datachange;
+                if(success) {
+                  message.success(msg);
+                  router.push({
+                    pathname: '/ConfigureCenter/PageConfigure/ListMakeHome',
+                  });
+                }
+                else {
+                  message.error(msg);
+                }
+              },
+            });
+       
+        
        }
 
   render() {//*************************
   
     const {searchForm,columns,isEdit,isDelete,isView,isRecover,initOption,editPath,dispatchType}=this.state;
-    const {OtherOpeIndex,OtherOpeDispatch,OtherOpeLabel}=this.props.location.params;
+    const {OtherOpeIndex,OtherOpeDispatch,OtherOpeLabel,OtherRouteLabel,OtherRouteDispatch}=this.props.location.params;
     console.log("ListPreviewRenderState",this.state);
     return (
       <PageHeaderWrapper >
@@ -163,3 +199,7 @@ export default  class ListMakePreview  extends PureComponent {
     );
   }
 }
+
+export default connect(({ listMakeModel }) => ({
+  datachange: listMakeModel.datachange, 
+}))(Form.create()(ListMakePreview))

@@ -26,6 +26,7 @@ class Welcome extends Component{
   }
 
  componentDidMount(){
+   console.log("window.routes",window._routes);
   console.log("props", this.props);
   const { dispatch } = this.props;
 
@@ -36,6 +37,7 @@ let db=new localStorageDB("myDB",localStorage);
   db.createTable("ListSetting",["moduleID","timestamp","setting"]);
   }
   db.insertOrUpdate("ListSetting", {moduleID:0},{moduleID: 0, timestamp:'', setting: ''});
+  db.insertOrUpdate("ListSetting", {moduleID:3},{moduleID: 3, timestamp:'', setting: ''});
   if(!db.tableExists("DetailSetting")){
   db.createTable("DetailSetting",["moduleID","timestamp","setting"]);
   }

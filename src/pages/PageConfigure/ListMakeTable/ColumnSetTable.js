@@ -25,6 +25,7 @@ class ColumnSetTable extends Component {
 
   constructor(props) {
     super(props);
+    console.log("ColumnSet",props.value)
     this.state = {
       data: props.value,
       loading: false,
