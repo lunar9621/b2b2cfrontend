@@ -46,14 +46,36 @@ class EditMake extends Component {
     const {
       dataSource: { editData, specialEvent }, editSetting: { ButtonSetting, SourceSetting }
     } = this.props;
-    let editDataDisplay = getFieldValue(`editDataDisplay${index}`);
+    let isInitSourceSetting=SourceSetting&& SourceSetting.length > 0 ?true:false;
+    let editDataDisplay =  isInitSourceSetting?SourceSetting[index].displayMethod:getFieldValue(`editDataDisplay${index}`);
+    let FormSetArr=isInitSourceSetting&&editDataDisplay== "Form"? SourceSetting[index].FormSet.map((item,index) => {
+      return {
+        key:index,
+        component: item.component,
+        defaultValue: item.defaultValue,
+        disabled: item.disabled,
+        field: item.field,
+        isRequired: item.isRequired,
+        name: item.name,
+      }
+    }):[];
+    let DynamicSetArr=isInitSourceSetting&&editDataDisplay== "DynamicTable"? SourceSetting[index].DynamicSet.map((item,index) => {
+      return {
+        key:index,
+        component: item.component,
+        field: item.field,
+        name: item.name,
+      }
+    }):[];
     if (editDataDisplay== "Form") {
       return  <div>
       <FormItem
       label="表单设置"
     >
-      {getFieldDecorator(`FormSet${index}`)
-        (<FormSetTable fieldValue={editData[index]?editData[index].field:[]} />)}
+      {getFieldDecorator(`FormSet${index}`, {
+                  initialValue:FormSetArr,
+      })
+         (<FormSetTable fieldValue={editData[index]?editData[index].field:[]} />)}
     </FormItem>
     </div>
     } else {
@@ -61,8 +83,10 @@ class EditMake extends Component {
         <FormItem
           label="动态表格设置"
         >
-          {getFieldDecorator(`DynamicSet${index}`)
-            (<DynamicSetTable fieldValue={editData[index]?editData[index].field:[]} />)}
+          {getFieldDecorator(`DynamicSet${index}`, {
+                  initialValue:DynamicSetArr,
+      })
+         (<DynamicSetTable fieldValue={editData[index]?editData[index].field:[]} />)}
         </FormItem>
       </div>
     }
@@ -70,7 +94,7 @@ class EditMake extends Component {
 
   okHandler = (e) => {
     const {
-      dataSource: { editData, specialEvent }, editSetting: { ButtonSetting, SourceSetting },loading,dispatch
+      dataSource: { editData, specialEvent }, editSetting: { ButtonSetting=[], SourceSetting=[] },loading,dispatch
     } = this.props;
     e.preventDefault();
     this.props.form.validateFields().then(
@@ -82,8 +106,8 @@ class EditMake extends Component {
           tmpSet.index=index;
           tmpSet.name=values['name'+index];
           tmpSet.title=values['title'+index];
-          tmpSet.displayMethod=values['editDataDisplay'+index];
-           if(values['editDataDisplay'+index]=="Form"){
+          tmpSet.displayMethod=SourceSetting&&SourceSetting.length>0?SourceSetting[index].displayMethod:values['editDataDisplay'+index];
+           if(tmpSet.displayMethod=="Form"){
              for(let j in values['FormSet'+index]){
              delete values['FormSet'+index][j].key;
              delete values['FormSet'+index][j].editable;
@@ -102,27 +126,27 @@ class EditMake extends Component {
         switch (id) {
           case 0:
             dispatchType = "ManageEditModel/fetchUserEdit";
-            initparams={id:0};
+            initparams=1;
             break;
           case 1:
             dispatchType = "ManageEditModel/fetchRoleEdit";
-            initparams={id:0};
+            initparams=1;
             break;
           case 2:
             dispatchType = "ManageEditModel/fetchDepartEdit";
-            initparams={id:0};
+            initparams=1;
             break;
           case 3:
             dispatchType = "ManageEditModel/fetchCoopEdit";
-            initparams={id:0};
+            initparams=1;
             break;
           case 4:
             dispatchType = "ManageEditModel/fetchContractEdit";
-            initparams={id:0}
+            initparams=1
             break;
           case 5:
             dispatchType = "ManageEditModel/fetchNoticeEdit";
-            initparams={id:0}
+            initparams=1
             break;
         }
         //未加ButtonSetting
@@ -131,6 +155,7 @@ class EditMake extends Component {
               pathname: '/ConfigureCenter/PageConfigure/EditMakePreview',
               params: {
               SourceSetting:editSetting,
+              ButtonSetting:ButtonSetting,
               id,
               dispatchType,
               initparams,
@@ -147,10 +172,32 @@ class EditMake extends Component {
       dataSource: { editData, specialEvent }, editSetting: { ButtonSetting, SourceSetting },loading
     } = this.props;
     const { sourceOption } = this.state;
-    console.log("detailrenderstate",this.state,"detailrenderprops",this.props);
+    console.log("editrenderstate",this.state,"editrenderprops",this.props);
     let { getFieldValue, getFieldDecorator } = this.props.form;
 
-    let loadSetting = SourceSetting && SourceSetting.length > 0 ? SourceSetting.map(item => <Card></Card>) : <span />;
+  let loadSetting = SourceSetting && SourceSetting.length > 0 ? SourceSetting.map((item,index)=>{ 
+  return  <Card title={SourceSetting[index].name}>
+       <FormItem
+          >
+            {
+              getFieldDecorator(`name${index}`, {
+                initialValue:SourceSetting[index].name,
+              })(<Input  type="hidden"/>)
+            }
+          </FormItem>
+          <FormItem
+           label="标题"
+          >
+            {
+              getFieldDecorator(`title${index}`, {
+                initialValue:SourceSetting[index].title,
+              })(<Input />)
+            }
+          </FormItem>
+        {this.renderSettingDetail(index)}
+  </Card>}) 
+  :
+   <span />;
     let editSetting = editData && editData.length > 0 ? editData.map((item,index) => {
       return <Card title={editData[index].name}>
          <FormItem
@@ -162,6 +209,7 @@ class EditMake extends Component {
             }
           </FormItem>
           <FormItem
+          label="标题"
           >
             {
               getFieldDecorator(`title${index}`, {

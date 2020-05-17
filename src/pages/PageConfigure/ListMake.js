@@ -22,6 +22,9 @@ class ListMake extends Component {
     dispatch({
       type: 'listMakeModel/fetchListMakeSource',
       payload: id,
+      callback:()=>{
+        console.log("afterprops", this.props);
+      }
     });
     dispatch({
       type: 'listMakeModel/fetchListSetting',
@@ -46,8 +49,12 @@ class ListMake extends Component {
           delete values.ColumnSet[i].editable;
         }
         let initOption = {};
-        let initOptionName = dataSource.fieldValue[values.initOptionName].name;
+        // let initOptionName = dataSource.fieldValue[values.initOptionName].name;
+        // initOption[initOptionName] = values.initOptionValue;
+        let initOptionName = values.initOptionName;
+        if(initOptionName!='all'){
         initOption[initOptionName] = values.initOptionValue;
+        }
         delete values.initOptionName;
         delete values.initOptionValue;
         let id = this.props.location.query.id, dispatchType;
@@ -92,7 +99,7 @@ class ListMake extends Component {
 
   render() {
     const {
-      dataSource, listSetting, loading
+      dataSource, listSetting, loading,dataSourceLoading
     } = this.props;
     let { getFieldValue, getFieldDecorator } = this.props.form;
     const checkboxOptions = [
@@ -118,7 +125,7 @@ class ListMake extends Component {
     }
 
     if (dataSource.otherRoute && dataSource.otherRoute.length > 0) {
-      otherRouteOptions = loading ? [<Option value="none">null</Option>] : dataSource.otherOpe.map((item, index) => <Option value={item.index}>{item.name}</Option>);
+      otherRouteOptions = loading ? [<Option value="none">null</Option>] : dataSource.otherRoute.map((item, index) => <Option value={item.index}>{item.name}</Option>);
       otherRouteOptions.unshift(<Option value="none">不包含</Option>);
     }
     //列表页其他操作的选项
@@ -139,8 +146,9 @@ class ListMake extends Component {
     //页面初始状态
     let pistatusOptions, pistatusNameOptions,pisinitname='',pisinitvalue='';//初始状态
     pistatusNameOptions = loading ? [<Option value="null">null</Option>] : dataSource.fieldValue.map((item, index) => <Option value={index}>{item.name}</Option>);
+    pistatusNameOptions.unshift(<Option value="all">显示全部</Option>)
     let tmpinitOpt = getFieldValue('initOptionName') ? getFieldValue('initOptionName') : 0;
-    if (!loading && tmpinitOpt && dataSource.fieldValue[tmpinitOpt].type == "enum") {
+    if (!loading && tmpinitOpt && dataSource.fieldValue[tmpinitOpt]&&dataSource.fieldValue[tmpinitOpt].type == "enum") {
       pistatusOptions = loading ? [<Option value="null">null</Option>] : dataSource.fieldValue[tmpinitOpt].options.map((item) => <Option value={item}>{item}</Option>)
     }
     for(let item in listSetting.initOption){
@@ -151,8 +159,9 @@ class ListMake extends Component {
 
 
     //设置搜索框和列表设置的上次编辑值
-    let renderFormArr = listSetting.searchForm && listSetting.searchForm.map(item => {
+    let renderFormArr = listSetting.searchForm && listSetting.searchForm.map((item,index) => {
       return {
+        key:index,
         name: item.label,
         field: item.value,
         width: item.wrapperWidth,
@@ -162,9 +171,10 @@ class ListMake extends Component {
     if (listSetting.columns && listSetting.columns[0].title == "") {
       listSetting.columns.shift();
     }
-    let columnSetArr = listSetting.columns && listSetting.columns.map(item => {
+    let columnSetArr = listSetting.columns && listSetting.columns.map((item,index) => {
       if (item.title != '') {
         return {
+          key:index,
           name: item.title,
           field: item.key,
           align: item.align == "center" ? "居中" : item.align == "right" ? "右" : "左",
@@ -174,7 +184,7 @@ class ListMake extends Component {
     return (
       <>
         <PageHeaderWrapper >
-          {loading ?
+          {loading||dataSourceLoading ?
             <Spin />
             :
             <Form onSubmit={this.okHandler}>
@@ -205,7 +215,12 @@ class ListMake extends Component {
                   }
                 </FormItem>
                 {
-                  !loading && dataSource.fieldValue.length > 0 && dataSource.fieldValue[tmpinitOpt].type == "enum" ?
+                getFieldValue('initOptionName')=='all'?
+                <div/>
+                :
+                <div>
+                   {
+                  !loading && dataSource.fieldValue.length > 0 && dataSource.fieldValue.filter(item=>item.name==tmpinitOpt).type == "enum" ?
                     <FormItem
                       label="初始状态"
                     >
@@ -231,6 +246,9 @@ class ListMake extends Component {
                       }
                     </FormItem>
                 }
+                </div>
+                }
+               
                 <FormItem
                   label="列表页包含操作"
                 >
@@ -243,7 +261,7 @@ class ListMake extends Component {
                     />)
                   }
                 </FormItem>
-                {
+                {/* {
                   dataSource.otherOpe && dataSource.otherOpe.length > 0 ?
                     <div>
                       <FormItem
@@ -276,8 +294,8 @@ class ListMake extends Component {
                       }
                     </div>
                     : <div />
-                }
-                 {
+                } */}
+                 {/* {
                   dataSource.otherRoute && dataSource.otherRoute.length > 0 ?
                     <div>
                       <FormItem
@@ -310,7 +328,7 @@ class ListMake extends Component {
                       }
                     </div>
                     : <div />
-                }
+                } */}
               </Card>
 
               <FooterToolbar>
@@ -328,4 +346,5 @@ export default connect(({ listMakeModel }) => ({
   dataSource: listMakeModel.dataSource.obj,//列表页数据源
   listSetting: listMakeModel.listSetting.obj,//列表页初始设置
   loading: listMakeModel.loading,
+  dataSourceLoading:listMakeModel.dataSourceLoading,
 }))(Form.create()(ListMake))

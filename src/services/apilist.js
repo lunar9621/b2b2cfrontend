@@ -1,7 +1,11 @@
 import request from '@/utils/request';
 //queryListMakeSource,queryListSetting,queryUserList,userManageResetPWD
 export async function queryCoopList(params) {
-    return request(`/api/listMake/queryCoopList?${JSON.stringify(params)}`);
+    return request(`/apikoa/listMake/queryCoopList?${params}`);
+}
+
+export async function queryTypeConfigureList(params) {
+    return request(`/apikoa/listMake/queryTypeConfigureList?${params}`);
 }
 export async function queryListSetting(id) {
 return request(`/api/listMake/queryListSetting?id=${id}`);

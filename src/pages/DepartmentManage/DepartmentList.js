@@ -71,6 +71,17 @@ class DepartmentList extends PureComponent {
  
 
   render() {
+    let searchForm= [{
+      label: "部门名称",
+      value: "name",
+      wrapperWidth: 200,
+      type: "input"
+  }, {
+      label: "部门主管",
+      value: "manager",
+      wrapperWidth: 200,
+      type: "input"
+  }];
     let columns = [
       {
         title: '部门名称',
@@ -106,7 +117,7 @@ class DepartmentList extends PureComponent {
       },
     ];
 let isEdit=true,isDelete=true,isView=false,isRecover=false;
-let searchForm=[],initOption={};
+let initOption={};
    return ( <ManageList
               dispatchType="ManageListModel/fetchDepartmentList"
               initOption={initOption}

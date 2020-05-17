@@ -23,7 +23,11 @@ class MenuConfigureHome extends Component {
             payload: values,
             callback: () =>　{
               const { success, msg } = this.props.datachange;
-              if(success) message.success(msg);
+              if(success) {
+                message.success(msg);
+               window.oldRender();
+               window.location.reload();
+              }
               else message.error(msg);
               this.props.form.resetFields();
             },

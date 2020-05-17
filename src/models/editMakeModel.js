@@ -1,4 +1,4 @@
-import {queryEditMakeSource,queryEditSetting,queryEditTimestamp} from '@/services/apieditMake';
+import {queryEditMakeSource,queryEditSetting,queryEditTimestamp,saveEditSetting} from '@/services/apieditMake';
 const editMakeModel = {
   namespace: 'editMakeModel',
   state: {
@@ -67,6 +67,23 @@ const editMakeModel = {
       const data = yield call(queryEditTimestamp,payload); 
       yield put({
         type: 'saveEditTimestamp',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *saveEditSetting({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      const data = yield call(saveEditSetting, payload);
+      yield put({
+        type: 'messageCall',
         payload: data,
       });
       yield put({

@@ -1,4 +1,4 @@
-import {queryCoopList,queryUserList,userManageResetPWD,userManageDelete,queryRoleList,roleManageDelete,
+import {queryCoopList,queryUserList,queryTypeConfigureList,userManageResetPWD,userManageDelete,queryRoleList,roleManageDelete,
   queryDepartmentList,departmentManageDelete,coopManageDelete} from '@/services/apilist';
 const ManageListModel = {
   namespace: 'ManageListModel',
@@ -21,6 +21,24 @@ const ManageListModel = {
     submitLoading: false,
   },
   effects: {
+    *fetchTypeConfigureList({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      console.log("entermodel",payload);
+      const data = yield call(queryTypeConfigureList,payload); 
+      yield put({
+        type: 'saveDataList',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
     *fetchCoopList({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',

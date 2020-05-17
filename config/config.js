@@ -191,6 +191,23 @@ export default {
                   component:'./LocaleConfigure/ConfigureHome',
                 },
                 {
+                  name:"类型配置",
+                  path:"TypeManage",
+                  component:'./TypeManage/TypeManageList',
+                },
+                {
+                  path: '/ConfigureCenter/TypeManage/TypeManageEdit',
+                  component: './TypeManage/TypeManageEdit',
+                },
+                {
+                  path: '/ConfigureCenter/TypeManage/TypeManageDetail',
+                  component: './TypeManage/TypeManageDetail',
+                },
+                {
+                  path: '/UserAndRole/UserManageEdit',
+                  component: './UserManage/UserEdit',
+                },
+                {
                   name:"菜单配置",
                   path:"MenuConfigure",
                   component:'./MenuConfigure/MenuConfigureHome',
@@ -252,7 +269,7 @@ export default {
               component: './DepartmentManage/DepartmentEdit',
             },
             {
-              path: '/CoopManage',
+              path: '/CoopManage/dataSource=all',
               name:'合作方管理',
               component:'./CoopManage/CoopList',
               icon: 'smile',

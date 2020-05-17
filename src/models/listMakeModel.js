@@ -1,8 +1,13 @@
-import {queryListMakeSource,queryListSetting,queryListTimestamp,saveListSetting} from '@/services/apilistMake';
+import {queryListMakeSource,queryListNewMenu,queryListSetting,queryListTimestamp,saveListSetting} from '@/services/apilistMake';
 const listMakeModel = {
   namespace: 'listMakeModel',
   state: {
     dataSource: {
+      success:"",
+      msg:"",
+      obj:{}, 
+    },
+    newMenu: {
       success:"",
       msg:"",
       obj:{}, 
@@ -22,11 +27,28 @@ const listMakeModel = {
       msg:"",
     },
     loading:true,
+    dataSourceLoading:true,
   },
   effects: {
-    *fetchListMakeSource({payload,callback}, { call, put}) {
+    *fetchListNewMenu({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
+        payload:true,
+      })
+      const data = yield call(queryListNewMenu,payload); 
+      yield put({
+        type: 'saveNewMenu',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+    *fetchListMakeSource({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataSourceLoading',
         payload:true,
       })
       const data = yield call(queryListMakeSource,payload); 
@@ -35,7 +57,7 @@ const listMakeModel = {
         payload: data,
       });
       yield put({
-        type:'dataLoading',
+        type:'dataSourceLoading',
         payload:false,
       })
       if(callback) callback();
@@ -115,6 +137,20 @@ const listMakeModel = {
       return {
         ...state,
         loading:payload,
+      };
+    },
+
+    dataSourceLoading(state,{payload}){
+      return {
+        ...state,
+        dataSourceLoading:payload,
+      };
+    },
+
+    saveNewMenu(state, { payload }) {
+      return {
+        ...state,
+        newMenu: payload,
       };
     },
 

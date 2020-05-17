@@ -2,17 +2,33 @@ let extraRoutes;
 
 export function render(oldRender){
  
-  fetch('/apikoa/routes').then((res)=>{
-    res.json().then(
-      data=>{
-        extraRoutes=data.routes;
-        console.log("data",data,"extraroutes",extraRoutes);
-        oldRender();
+  // fetch('/apikoa/routes').then((res)=>{
+  //   res.json().then(
+  //     data=>{
+  //       extraRoutes=data.routes;
+  //       console.log("data",data,"extraroutes",extraRoutes);
+  //       oldRender();
        
-    });
+  //   });
    
-  });
- 
+  // });
+  window.oldRender=()=>{
+    console.log("runwindow.oldRender");
+    fetch('/apikoa/routes').then((res)=>{
+      res.json().then(
+        data=>{
+          extraRoutes=data.routes;
+          console.log("data",data,"extraroutes",extraRoutes);
+          oldRender();
+         console.log("endwindowoldrender");
+      });
+     
+    });
+  }
+ if(window.oldRender){
+   console.log("enterifoldrender");
+   window.oldRender();
+ }
 }
 
 export function patchRoutes(routes) {
@@ -41,13 +57,5 @@ export function patchRoutes(routes) {
       }
     }
   }
+  window.routes=routes;
 }
-// export function patchRoutes(routes) {
-//   routes.unshift({
-//     path: '/foo',
-//     exact: true,
-//     component: routes[0].component,//routes[0]为提前在config.js中写好的路由配置中的第一个路由
-//   });
-// }
-
-

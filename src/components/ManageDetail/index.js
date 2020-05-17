@@ -3,9 +3,10 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { routerRedux, Route, Switch } from 'dva/router';
 import {router} from 'umi';
-import { Table, Row, Col, Card, Form, Input, Select, List,Spin,Descriptions} from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, List,Spin,Descriptions,Button} from 'antd';
 import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import FooterToolbar from '../../components/FooterToolbar';
 import styles from './style.less';
 
 
@@ -27,6 +28,20 @@ class ManageDetail extends Component {
         let {dataDetail,loading}=this.props;
         console.log("renderDetaildataDetail",dataDetail,"renderDetailvalues",values,"loading",loading);
         let data=dataDetail[values.name];
+        //渲染特殊属性
+      //   if(data&&data.length>0){
+      //     let keysArr=Object.keys(data[0]);
+      //     if(keysArr.indexOf('specialProperty')!=-1){
+      //       if(values.displayMethod=="table"){
+      //         for(let item in data[0].specialProperty){
+      //           values.tableColumnSet.push({
+      //             name: "特殊属性",
+      //             field: "specialProperty",
+      //             align: "居中"});
+      //         }
+      //     }
+      //   }
+      // }
     if(values.displayMethod=="list")
     {
       console.log("enterlistdata",data);
@@ -67,7 +82,7 @@ class ManageDetail extends Component {
          tmpColumn.title=values.tableColumnSet[index].name;
          tmpColumn.key=values.tableColumnSet[index].field;
          tmpColumn.dataIndex=values.tableColumnSet[index].field;
-         tmpColumn.align=values.tableColumnSet[index].align=="左"?"left":values.tableColumnSet[index].align=="居中"?"center":"right";
+         tmpColumn.align=values.tableColumnSet[index].align=="左"?"left":values.tableColumnSet[index].align=="中"?"center":"right";
          columns.push(tmpColumn);
        }
        return  <Table
@@ -81,8 +96,15 @@ class ManageDetail extends Component {
     }
   }
 
+  returnHandler = () => {
+    let {returnPath}=this.props;
+      router.push({
+        pathname: returnPath,
+      })
+  }
+
     render() {
-        const{ SourceSetting,id,dispatchType,initparams,loading}=this.props;
+        const{ SourceSetting=[],id,dispatchType,initparams,loading}=this.props;
         console.log("renderManageDetail",this.props);
         return (
             <PageHeaderWrapper>
@@ -93,6 +115,9 @@ class ManageDetail extends Component {
                 </Card>
                })
              }
+              <FooterToolbar> 
+                    <Button type="primary" onClick={this.returnHandler}>返回</Button >
+                </FooterToolbar>
             </PageHeaderWrapper>
         );
     }

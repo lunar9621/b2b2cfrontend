@@ -150,7 +150,7 @@ class FormSetTable extends Component {
 
       const target = this.getRowByKey(key) || {};
 
-      if (!target.name || !target.field || !target.isRequired|| !target.defaultValue|| !target.component ) {
+      if (!target.name || !target.field || !target.isRequired|| !target.component ) {
         message.error('请填写完整成员信息。');
         e.target.focus();
         this.setState({
@@ -204,7 +204,7 @@ console.log("-------------onchange",onChange);
     const fieldOptions=fieldValue.map((item, index) => <Option value={item.name}>{item.name}</Option>);
     const columns =
     [{
-     title: '列表项名称',
+     title: '表单项名称',
      dataIndex: 'name',
      key: 'name',
      align:'center',
@@ -215,7 +215,7 @@ console.log("-------------onchange",onChange);
              value={text}
              onChange={e => this.handleInputFieldChange(e, 'name', record.key)}
              onKeyPress={e => this.handleKeyPress(e, record.key)}
-             placeholder="列表项名称"     
+             placeholder="表单项名称"     
            />
          );
        }
@@ -223,7 +223,7 @@ console.log("-------------onchange",onChange);
      },
    },
    {
-       title: '列表项字段',
+       title: '表单项字段',
        dataIndex: 'field',
        key: 'field',
        align:'center',
@@ -234,7 +234,7 @@ console.log("-------------onchange",onChange);
                value={text}
                onChange={e => this.handleSelectFieldChange(e, 'field', record.key)}
                onKeyPress={e => this.handleKeyPress(e, record.key)}
-               placeholder="列表项字段"          
+               placeholder="表单项字段"          
              >
              {fieldOptions}
              </Select>
@@ -345,22 +345,19 @@ console.log("-------------onchange",onChange);
         align:'center',
         render: (text, record) => {
           if (record.editable) {
-            if( record.type==="Input"||record.type==="InpuNumber"||record.type==="Select"){
+            
             return (
               <Select
                 value={text}
                 onChange={e => this.handleSelectFieldChange(e, 'disabled', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
               >
-              <Option value="是">是</Option>
-              <Option value="否">否</Option>
+              <Option value={true}>是</Option>
+              <Option value={false}>否</Option>
               </Select>
             );
-            }else{
-              return (<div/>)
-            }
           }
-          return text;
+          return text===true?"是":"否";
         },
       },
    {

@@ -45,16 +45,39 @@ class DetailMake extends Component {
   renderSettingDetail = (index) => {
     let { getFieldValue, getFieldDecorator } = this.props.form;
     const {
-      dataSource: { detailData, specialEvent }, detailSetting: { ButtonSetting, SourceSetting }
+      dataSource: { detailData=[], specialEvent=[] }, detailSetting: { ButtonSetting=[], SourceSetting=[] }
     } = this.props;
-    let detailDataDisplay = getFieldValue(`detailDataDisplay${index}`);
+    let isInitSettingExist=SourceSetting&& SourceSetting.length>0?true:false;
+    let detailDataDisplay = isInitSettingExist?SourceSetting[index].displayMethod: getFieldValue(`detailDataDisplay${index}`);
+    let ListSetArr=isInitSettingExist&&detailDataDisplay== "list"? SourceSetting[index].listItemSet.map((item,index) => {
+      return {
+        key:index,
+        field: item.field,
+        name: item.name,
+      }
+    }):[];
+    let DescriptionsSetArr=isInitSettingExist&&detailDataDisplay== "description"? SourceSetting[index].descriptionsItemSet.map((item,index) => {
+      return {
+        key:index,
+        field: item.field,
+        name: item.name,
+      }
+    }):[];
+    let tableColumnSetArr=isInitSettingExist&&detailDataDisplay== "table"? SourceSetting[index].tableColumnSet.map((item,index) => {
+      return {
+        key:index,
+        align: item.align,
+        field: item.field,
+        name: item.name,
+      }
+    }):[];
     if (detailDataDisplay== "list") {
       return <div>
          <FormItem
         >
           {
             getFieldDecorator(`name${index}`, {
-              initialValue: detailData[index]? detailData[index].name:'',
+              initialValue: isInitSettingExist? SourceSetting[index].name:detailData[index].name,
             })(<Input type="hidden"/>)
           }
         </FormItem>
@@ -64,7 +87,7 @@ class DetailMake extends Component {
           {
             getFieldDecorator(`title${index}`, {
               rules: [{ required: true, message: '请选择' }],
-              initialValue: detailData[index]? detailData[index].name:'',
+              initialValue:isInitSettingExist? SourceSetting[index].title:detailData[index].name,
             })(<Input />)
           }
         </FormItem>
@@ -74,6 +97,7 @@ class DetailMake extends Component {
           {
             getFieldDecorator(`bordered${index}`, {
               rules: [{ required: true, message: '请选择' }],
+              initialValue:isInitSettingExist?SourceSetting[index].bordered:true,
             })(<Select
             >
               <Option value={true}>是</Option>
@@ -87,6 +111,7 @@ class DetailMake extends Component {
           {
             getFieldDecorator(`itemLayout${index}`, {
               rules: [{ required: true, message: '请选择' }],
+              initialValue:isInitSettingExist?SourceSetting[index].itemLayout:"vertical",
             })(<Select
             >
               <Option value="vertical">竖排</Option>
@@ -106,7 +131,9 @@ class DetailMake extends Component {
         <FormItem
           label="列表项设置"
         >
-          {getFieldDecorator(`listItemSet${index}`)
+          {getFieldDecorator(`listItemSet${index}`, {
+              initialValue:ListSetArr,
+            })
             (<ListTable fieldValue={detailData[index]?detailData[index].field:[]} />)}
         </FormItem>
       </div>
@@ -116,7 +143,7 @@ class DetailMake extends Component {
         >
           {
             getFieldDecorator(`name${index}`, {
-              initialValue: detailData[index]? detailData[index].name:'',
+              initialValue: isInitSettingExist? SourceSetting[index].name:detailData[index].name,
             })(<Input type="hidden"/>)
           }
         </FormItem>
@@ -126,7 +153,7 @@ class DetailMake extends Component {
           {
             getFieldDecorator(`title${index}`, {
               rules: [{ required: true, message: '请选择' }],
-              initialValue: detailData[index]? detailData[index].name:'',
+              initialValue: isInitSettingExist? SourceSetting[index].title:detailData[index].name,
             })(<Input />)
           }
         </FormItem>
@@ -136,6 +163,7 @@ class DetailMake extends Component {
           {
             getFieldDecorator(`column${index}`, {
               rules: [{ required: true, message: '请选择' }],
+              initialValue: isInitSettingExist? SourceSetting[index].title:detailData[index].name,
             })(<InputNumber />)
           }
         </FormItem>
@@ -145,6 +173,7 @@ class DetailMake extends Component {
           {
             getFieldDecorator(`bordered${index}`, {
               rules: [{ required: true, message: '请选择' }],
+              initialValue:isInitSettingExist?SourceSetting[index].bordered:true,
             })(<Select
             >
               <Option value={true}>是</Option>
@@ -158,6 +187,7 @@ class DetailMake extends Component {
           {
             getFieldDecorator(`itemLayout${index}`, {
               rules: [{ required: true, message: '请选择' }],
+              initialValue:isInitSettingExist?SourceSetting[index].itemLayout:"vertical",
             })(<Select
             >
               <Option value="vertical">竖排</Option>
@@ -168,7 +198,9 @@ class DetailMake extends Component {
         <FormItem
           label="描述列表项设置"
         >
-          {getFieldDecorator(`descriptionsItemSet${index}`)
+          {getFieldDecorator(`descriptionsItemSet${index}`, {
+              initialValue:DescriptionsSetArr,
+            })
             (<DescriptionsTable fieldValue={detailData[index]?detailData[index].field:[]} />)}
         </FormItem>
       </div>
@@ -187,14 +219,16 @@ class DetailMake extends Component {
           {
             getFieldDecorator(`title${index}`, {
               rules: [{ required: true, message: '请选择' }],
-              initialValue: detailData[index]? detailData[index].name:'',
+              initialValue: isInitSettingExist? SourceSetting[index].title:detailData[index].name,
             })(<Input />)
           }
         </FormItem>
         <FormItem
           label="表格列设置"
         >
-          {getFieldDecorator(`tableColumnSet${index}`)
+          {getFieldDecorator(`tableColumnSet${index}`, {
+              initialValue:tableColumnSetArr,
+            })
             (<DetailColumnsSetTable fieldValue={detailData[index]?detailData[index].field:[]} />)}
         </FormItem>
       </div>
@@ -203,7 +237,7 @@ class DetailMake extends Component {
 
   okHandler = (e) => {
     const {
-      dataSource: { detailData, specialEvent }, detailSetting: { ButtonSetting, SourceSetting },loading,dispatch
+      dataSource: { detailData=[], specialEvent=[] }, detailSetting: { ButtonSetting, SourceSetting },loading,dispatch
     } = this.props;
     e.preventDefault();
     this.props.form.validateFields().then(
@@ -211,12 +245,13 @@ class DetailMake extends Component {
         console.log("entervalidateValues", values);
         let detailSetting=[];
         for(let index=0;index<detailData.length;index++){
+          console.log("index",index);
           let tmpSet={};
           tmpSet.index=index;
           tmpSet.name=values['name'+index];
           tmpSet.title=values['title'+index];
-          tmpSet.displayMethod=values['detailDataDisplay'+index];
-           if(values['detailDataDisplay'+index]=="list"){
+          tmpSet.displayMethod=SourceSetting && SourceSetting.length > 0 ?SourceSetting[index].displayMethod:values['detailDataDisplay'+index].diaplayMethod;
+           if(tmpSet.displayMethod=="list"){
              for(let j in values['listItemSet'+index]){
              delete values['listItemSet'+index][j].key;
              delete values['listItemSet'+index][j].editable;
@@ -225,7 +260,7 @@ class DetailMake extends Component {
             tmpSet.bordered=values['bordered'+index];
             tmpSet.itemLayout=values['itemLayout'+index];
             tmpSet.column=values['column'+index];
-           }else if(values['detailDataDisplay'+index]=="description"){
+           }else if(tmpSet.displayMethod=="description"){
             for(let j in values['descriptionsItemSet'+index]){
               delete values['descriptionsItemSet'+index][j].key;
               delete values['descriptionsItemSet'+index][j].editable;
@@ -235,6 +270,7 @@ class DetailMake extends Component {
              tmpSet.itemLayout=values['itemLayout'+index];
              tmpSet.column=values['column'+index];
            }else{
+             console.log("entertableColumnSetindex:",index);
             for(let j in values['tableColumnSet'+index]){
               delete values['tableColumnSet'+index][j].key;
               delete values['tableColumnSet'+index][j].editable;
@@ -246,8 +282,8 @@ class DetailMake extends Component {
         let id = this.props.location.query.id, dispatchType,initparams;
         switch (id) {
           case 2:
-            dispatchType = "ManageDetailModel/fetchDepartDetail";
-            initparams={id:0};
+            dispatchType = "ManageDetailModel/fetchDepartmentDetail";
+            initparams='0001';
             break;
           case 3:
             dispatchType = "ManageDetailModel/fetchCoopDetail";
@@ -268,6 +304,7 @@ class DetailMake extends Component {
               pathname: '/ConfigureCenter/PageConfigure/DetailMakePreview',
               params: {
               SourceSetting:detailSetting,
+              ButtonSetting,
               id,
               dispatchType,
               initparams,
@@ -281,13 +318,17 @@ class DetailMake extends Component {
 
   render() {
     const {
-      dataSource: { detailData, specialEvent }, detailSetting: { ButtonSetting, SourceSetting },loading
+      dataSource: { detailData=[], specialEvent=[] }, detailSetting: { ButtonSetting=[], SourceSetting=[] },loading
     } = this.props;
     const { sourceOption } = this.state;
     console.log("detailrenderstate",this.state,"detailrenderprops",this.props);
     let { getFieldValue, getFieldDecorator } = this.props.form;
 
-    let loadSetting = SourceSetting && SourceSetting.length > 0 ? SourceSetting.map(item => <Card></Card>) : <span />;
+  let loadSetting = SourceSetting && SourceSetting.length > 0 ? SourceSetting.map((item,index) => {
+    return <Card title={detailData[index].name}>
+     {this.renderSettingDetail(index)}
+   </Card>
+ }) : <span />
     let editSetting = detailData && detailData.length > 0 ? detailData.map((item,index) => {
       return <Card title={detailData[index].name}>
        {detailData[index]&&detailData[index].type == "object" ?
@@ -295,9 +336,7 @@ class DetailMake extends Component {
             label="请选择数据源展示方式"
           >
             {
-              getFieldDecorator(`detailDataDisplay${index}`, {
-                rules: [{ required: true, message: '请选择' }],
-              })(<Select>
+              getFieldDecorator(`detailDataDisplay${index}`)(<Select>
                 <Option value="list">list</Option>
                 <Option value="description">description</Option>
               </Select>)
@@ -308,9 +347,7 @@ class DetailMake extends Component {
             label="请选择数据源展示方式"
           >
             {
-              getFieldDecorator(`detailDataDisplay${index}`, {
-                rules: [{ required: true, message: '请选择' }],
-              })(<Select>
+              getFieldDecorator(`detailDataDisplay${index}`)(<Select>
                 <Option value="table">table</Option>
               </Select>)
             }

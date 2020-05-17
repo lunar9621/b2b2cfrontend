@@ -254,14 +254,14 @@ console.log("-------------onchange",onChange);
               onKeyPress={e => this.handleKeyPress(e, record.key)}
               placeholder="搜索框控件"          
             > 
-              <Option value="输入框" >输入框</Option>
-              <Option value="数字输入框">数字输入框</Option>
-              <Option value="日期选择框" >日期选择框</Option>
-              <Option value="选择器" >选择器</Option>
+              <Option value="Input" >输入框</Option>
+              <Option value="InputNumber">数字输入框</Option>
+              <Option value="DatePicker" >日期选择框</Option>
+              <Option value="Select" >选择器</Option>
             </Select>
           );
         }
-        return text;
+        return text=="Input"?"输入框":text=="InputNumber"?"数字输入框":text=="DatePicker"?"日期选择框":"选择器";
        },
       },
       {

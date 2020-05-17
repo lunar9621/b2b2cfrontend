@@ -71,7 +71,11 @@ export async function saveNewDepartment(params) {
 }
 //CoopManage
 export async function queryCoopEdit(params){
-    return request(`/api/editMake/queryCoopEdit?ID=${params}`);
+    return request(`/apikoa/editMake/queryCoopEdit?coopID=${params}`);
+}
+
+export async function queryCoopNewProper(params){
+  return request(`/apikoa/editMake/queryCoopNewProper?typeID=${params}`);
 }
 
 
@@ -88,3 +92,21 @@ export async function saveNewCoop(params) {
         data: params,
       });
 }
+//saveTypeConfigureEdit,saveNewTypeConfigure,queryTypeConfigureEdit
+export async function queryTypeConfigureEdit(ID){
+    return request(`/apikoa/editMake/queryTypeConfigureEdit?typeID=${ID}`);
+}
+
+export async function saveTypeConfigureEdit(params) {
+    return request('/apikoa/editMake/saveTypeConfigureEdit', {
+      method: 'POST',
+      data: params,
+    });
+  }
+
+  export async function saveNewTypeConfigure(params) {
+    return request('/apikoa/editMake/saveNewTypeConfigure', {
+      method: 'POST',
+      data: params,
+    });
+  }

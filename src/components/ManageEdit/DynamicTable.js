@@ -1,6 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, Popconfirm, Table, message,Select,InputNumber, DatePicker } from 'antd';
 import React, { Fragment, Component } from 'react';
+import moment from 'moment';
 import isEqual from 'lodash.isequal';
 import styles from './style.less';
 
@@ -106,14 +107,14 @@ class DynamicTable extends Component {
     }
   }
 
-  handleDatepPickerFieldChange(e, fieldName, key) {
+  handleDatePickerFieldChange(e, fieldName, key) {
     const { data = [] } = this.state;
     const newData = [...data];
     const target = this.getRowByKey(key, newData);
 
     if (target) {
-      console.log("inputevent",e);
-      target[fieldName] = e.target.value;
+      console.log("DatePickerevent",e);
+      target[fieldName] = e.toISOString().substring(0, 10);
       this.setState({
         data: newData,
       });
@@ -268,16 +269,16 @@ console.log("-------------onchange",onChange);
                         dataIndex: setting[key].field,
                         key: setting[key].field,
                         render: (text, record) => {
-                            if (record.editable) {
+                            if   (record.editable) {
                                 return (
                                 <DatePicker
-                                    value={text}
+                                    value={text?moment(text):null}
                                     onChange={e => this.handleDatePickerFieldChange(e, setting[key].field, record.key)}
                                     onKeyPress={e => this.handleKeyPress(e, record.key)}
                                 />
                                 );
                             }
-                            return text;
+                            return moment(text).format('YYYY-MM-DD');;
                             },
                     },
                 )

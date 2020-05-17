@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'dva';
-import {Link } from 'dva/router';
+import { Link, router } from 'umi';
 import { Table,Row, Col, Card, Form, Icon, Select, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message,Divider, Tooltip,Radio  } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ManageEdit from '../../components/ManageEdit';
@@ -9,7 +9,7 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 
 @Form.create()
-export default  class EditMakePreview  extends Component {
+ class EditMakePreview  extends Component {
 
   constructor(props) {
     super(props);
@@ -21,9 +21,30 @@ export default  class EditMakePreview  extends Component {
   }
 
        save=()=>{
-
-         let params=JSON.parse(JSON.stringify(this.props.location.params));
+        let {SourceSetting,ButtonSetting,id}=this.props.location.params;
+        let {dispatch}=this.props;
+         let params={
+           SourceSetting,
+           ButtonSetting,
+           moduleID:id,
+         };
          console.log("保存编辑页参数",params);
+         dispatch({
+          type: 'editMakeModel/saveEditSetting',
+          payload: params,
+          callback: () =>　{
+            const { success, msg } = this.props.datachange;
+            if(success) {
+              message.success(msg);
+              router.push({
+                pathname: '/ConfigureCenter/PageConfigure/EditMakeHome',
+              });
+            }
+            else {
+              message.error(msg);
+            }
+          },
+        });
        }
 
   render() {//*************************
@@ -37,7 +58,7 @@ export default  class EditMakePreview  extends Component {
               SourceSetting={SourceSetting}
               initparams={initparams}
               isNew={false}
-              saveDispatch=''
+              saveEditDispatch=''
             > 
             </ManageEdit>
             <FooterToolbar>
@@ -55,3 +76,10 @@ export default  class EditMakePreview  extends Component {
     );
   }
 }
+export default connect(({ editMakeModel }) => ({
+  datachange: editMakeModel.datachange, 
+}))(Form.create()(EditMakePreview))
+
+
+
+

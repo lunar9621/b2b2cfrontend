@@ -1,4 +1,4 @@
-import {queryDetailMakeSource,queryDetailSetting,queryDetailTimestamp} from '@/services/apidetailMake';
+import {queryDetailMakeSource,queryDetailSetting,queryDetailTimestamp,saveDetailSetting} from '@/services/apidetailMake';
 const detailMakeModel = {
   namespace: 'detailMakeModel',
   state: {
@@ -66,6 +66,23 @@ const detailMakeModel = {
       const data = yield call(queryDetailTimestamp,payload); 
       yield put({
         type: 'saveDetailTimestamp',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *saveDetailSetting({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      const data = yield call(saveDetailSetting, payload);
+      yield put({
+        type: 'messageCall',
         payload: data,
       });
       yield put({

@@ -4,7 +4,11 @@ export async function queryCoopDetail(params){
     return request(`/api/detailMake/queryCoopDetail?${JSON.stringify(params)}`);
 }
 
+export async function queryTypeConfigureDetail(ID){
+    return request(`/apikoa/detailMake/queryTypeConfigureDetail?typeID=${ID}`);
+}
 
-export async function queryDepartmentDetail(params){
-    return request(`/api/detailMake/queryDepartmentDetail?${JSON.stringify(params)}`);
+
+export async function queryDepartmentDetail(ID){
+    return request(`/api/detailMake/queryDepartmentDetail?ID=${ID}`);
 }

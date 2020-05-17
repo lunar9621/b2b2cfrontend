@@ -8,8 +8,8 @@ function getFakeCaptcha(req, res) {
         success: "",
         msg: "",
         obj: {
-            rows: [{ID:"0001",supplierName:"供应商1",Operator:"zyh",Date:"2019-02-11"},
-            {ID:"0002",supplierName:"供应商2",Operator:"zyh",Date:"2020-01-11"}],
+            rows: [{ID:"0001",coopName:"供应商1",Operator:"zyh",Date:"2019-02-11"},
+            {ID:"0002",coopName:"供应商2",Operator:"zyh",Date:"2020-01-11"}],
             pageSize: null,
             pageNumber: null,
             total: null,
@@ -80,14 +80,19 @@ function getFakeCaptcha(req, res) {
         total: null,
     },
   },
-    '/api/listMake/queryListMakeSource':{
+    '/api/listMake/queryListMakeSource':(req,res)=>{
+      if(req.query.moduleID==3){
+       res.send({ 
         success:true,
         msg:"成功",
         obj:{
-            fieldValue:[{name:"supplierName",type:"string"},{name:"Operator",type:"string"},{name:"Date",type:"Date"},{name:"status",type:"enum",options:[0,1,2]}],
+            fieldValue:[{name:"coopName",type:"string"},{name:"creator",type:"string"},{name:"createDate",type:"Date"},{name:"status",type:"enum",options:[0,1]},{name:"address",type:"string"},
+            {name:"contacts",type:"string"},{name:"phone",type:"string"},{name:"coopID",type:"string"}],
             otherOpe:[{index:0,name:"resetPWD",dispatchType:"ManageListModel/userManageResetPWD"}],
             otherRoute:[],
         },
+      });
+    }
     },
     '/api/listMake/queryListSetting':{
         success:true,

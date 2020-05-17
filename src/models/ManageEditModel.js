@@ -1,9 +1,15 @@
-import {queryUserEdit,queryRoleEdit,queryDepartmentEdit,queryCoopEdit,saveUserEdit,saveNewUser,saveRoleEdit,saveNewRole,
-  queryAuthTree,submitAuth,saveDepartmentEdit,saveNewDepartment,saveCoopEdit,saveNewCoop,} from '@/services/apiedit';
+import {queryUserEdit,queryRoleEdit,queryDepartmentEdit,queryTypeConfigureEdit,queryCoopEdit,saveUserEdit,saveNewUser,saveRoleEdit,saveNewRole,
+  queryAuthTree,submitAuth,saveDepartmentEdit,saveNewDepartment,saveCoopEdit,saveNewCoop,saveNewTypeConfigure,saveTypeConfigureEdit,queryCoopNewProper} from '@/services/apiedit';
 const ManageEditModel = {
   namespace: 'ManageEditModel',
   state: {
     dataEdit: {
+      success: "",
+      msg: "",
+      obj: {
+      },
+    },
+    dataNewProper: {
       success: "",
       msg: "",
       obj: {
@@ -76,15 +82,15 @@ const ManageEditModel = {
       if(callback) callback();
     },
 
-    *fetchDepartmentEdit({payload,callback}, { call, put}) {
+    *fetchCoopNewProper({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
         payload:true,
       })
       console.log("entermodel",payload);
-      const data = yield call(queryDepartmentEdit,payload); 
+      const data = yield call(queryCoopNewProper,payload); 
       yield put({
-        type: 'saveDataEdit',
+        type: 'saveDataNewProper',
         payload: data,
       });
       yield put({
@@ -127,6 +133,58 @@ const ManageEditModel = {
         payload: false,
       });
       if (callback) callback();
+    },
+
+    *fetchTypeConfigureEdit({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      console.log("entermodel",payload);
+      const data = yield call(queryTypeConfigureEdit,payload); 
+      yield put({
+        type: 'saveDataEdit',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *saveNewTypeConfigure({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(saveNewTypeConfigure, payload);
+      yield put({
+        type: 'messageCall',
+        payload: data,
+      });
+      yield put({
+        type:'dataSubmitLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *saveTypeConfigureEdit({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(saveTypeConfigureEdit, payload);
+      yield put({
+        type: 'messageCall',
+        payload: data,
+      });
+      yield put({
+        type:'dataSubmitLoading',
+        payload:false,
+      })
+      if(callback) callback();
     },
 
     *saveUserEdit({ payload,callback }, { call,put}) {
@@ -309,6 +367,13 @@ const ManageEditModel = {
       return {
         ...state,
         dataEdit: payload,
+      };
+    },
+
+    saveDataNewProper(state, { payload }) {
+      return {
+        ...state,
+        dataNewProper: payload,
       };
     },
 

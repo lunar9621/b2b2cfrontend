@@ -76,15 +76,32 @@ function getFakeCaptcha(req, res) {
   });
 },
 
-    '/api/editMake/queryEditMakeSource':{
-        success:true,
-        msg:"成功",
-        obj:{
-            editData:[{name:"UserInfo",type:"object",display:"",field:[{name:"name",type:"string"},{name:"account",type:"string"},{name:"mobile", type:"string"}]},
-            {name:"OtherInfo",type:"array",display:"",field:[{name:"address",type:"string"},{name:"postcode",type:"string"}]},
-          ],                     
-            specialEvent:[{name:"resetPW",type:"EventDeal"}],
-        },
+    '/api/editMake/queryEditMakeSource':(req,res)=>{
+      console.log("queryMakeSource",req.query);
+      switch (req.query.moduleID){
+        case '0':
+        res.send({success:true,
+          msg:"成功",
+          obj:{
+              editData:[{name:"UserInfo",type:"object",display:"",field:[{name:"name",type:"string"},{name:"account",type:"string"},{name:"mobile", type:"string"}]},
+              {name:"OtherInfo",type:"array",display:"",field:[{name:"address",type:"string"},{name:"postcode",type:"string"}]},
+            ],                     
+              specialEvent:[{name:"resetPW",type:"EventDeal"}],
+          },
+        })
+        case '3' :
+          res.send({ 
+            success:true,
+            msg:"成功",
+            obj:{
+              editData:[{name:"CoopInfo",type:"object",display:"",field:[{name:"coopName",type:"string"},{name:"creator",type:"string"},{name:"createDate", type:"date"},
+              {name:"createDate", type:"date"},{name:"createDate", type:"date"}]},
+            
+            ],                     
+              specialEvent:[],
+            },
+          });
+      }
     },
     '/api/editMake/queryEditSetting':{
         success:true,

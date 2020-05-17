@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { routerRedux, Route, Switch } from 'dva/router';
 import {router} from 'umi';
-import { Table, Row, Col, Card, Form, Input, Select, Radio,Spin,Checkbox,Upload,InputNumber,Button,message} from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, Radio,Spin,Checkbox,DatePicker,Upload,InputNumber,Button,message} from 'antd';
 import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import DynamicTable from './DynamicTable';
@@ -23,17 +23,52 @@ class ManageEdit extends Component {
     this.state = {
       fileList: [],
       fileName:'',
+      isEditAddSpecialProper:false,
+      newSourceSetting:[],
     };
   }
     componentDidMount() {
         const {dispatch}=this.props;
-        const{ SourceSetting,id,dispatchType,initparams,isNew}=this.props;
+        const{ SourceSetting,id,dispatchType,initparams,dataNewProper,isNew,newParam,newDispatchType}=this.props;
         console.log("ManageEditprops",this.props);
         if(!isNew){
+          console.log("enterdispatchbefore");
         dispatch({
             type: dispatchType,
             payload: initparams,
         });
+      }
+      if(isNew&&newParam){
+        dispatch({
+          type: newDispatchType,
+          payload: newParam,
+          callback:()=>{
+            let { SourceSetting,dataNewProper,isNew,newParam,newDispatchType}=this.props;
+            console.log("this.props",this.props);
+            if(isNew&&dataNewProper&&dataNewProper.specialProperty){
+              console.log("enterNewdataProper");
+              let lastindex=SourceSetting.length;
+              let specialPropertySet=[];
+              for(let i=0;i<dataNewProper.specialProperty.length;i++){
+                specialPropertySet.push({
+                    name: dataNewProper.specialProperty[i].name,
+                    field: dataNewProper.specialProperty[i].field,
+                    isRequired: dataNewProper.specialProperty[i].isRequired,
+                    disabled: dataNewProper.specialProperty[i].disabled,
+                    defaultValue: dataNewProper.specialProperty[i].defaultValue,
+                    component: dataNewProper.specialProperty[i].component,
+                });
+              }
+              SourceSetting.push({
+                index:lastindex,name:"SpecialPropertyInfo",title:"SpecialPropertyInfo",displayMethod:"Form",
+                FormSet:specialPropertySet});
+                console.log("SourceSetting",SourceSetting);
+                this.setState({
+                  newSourceSetting:SourceSetting,
+                })
+            }
+          }
+      })
       }
     }
 
@@ -156,13 +191,33 @@ class ManageEdit extends Component {
     
       };
 
-        let {dataEdit,loading,isNew}=this.props;
+        let {dataEdit,loading,isNew,dataNewProper,saveEditDispatch,dispatch}=this.props;
+       
         console.log("renderEdidataDetail",dataEdit,"renderEditvalues",values,"loading",loading);
         let data=dataEdit[values.name];
+    
         let options=[],tempoptions;
         if(values.displayMethod=="Form")
         {
-          console.log("entereditdata",data);
+          //若有特殊属性，根据特殊属性渲染
+          if(!isNew&&data&&data.specialProperty&&this.state.isEditAddSpecialProper==false&&saveEditDispatch!=''){
+            let specialPropertydata=JSON.parse(JSON.stringify(data.specialProperty));
+            console.log("specialPropertydata",specialPropertydata);
+           for(var i=0;i<specialPropertydata.length;i++){
+           values.FormSet.push({
+            name: specialPropertydata[i].name,
+            field: specialPropertydata[i].field,
+            isRequired: specialPropertydata[i].isRequired,
+            disabled: specialPropertydata[i].disabled,
+            defaultValue:specialPropertydata[i].defaultValue,
+            component:specialPropertydata[i].component,
+            }) 
+           }
+           this.setState({
+             isEditAddSpecialProper:true,
+           })
+          }
+          console.log("entereditdata",data,"FormSet",values);
           return loading&&!isNew?<Spin/>:
           values.FormSet.map(item=>{
             switch (item.component){
@@ -234,7 +289,7 @@ class ManageEdit extends Component {
                         label={item.name}>
                       {
                         getFieldDecorator(`${item.field}`, {
-                          initialValue:isNew?item.defaultValue:data[item.field],
+                          initialValue:isNew?moment(item.defaultValue):moment(data[item.field]),
                           rules: [{ required: item.isRequired=="是"?true:false, }],
                         })( <DatePicker />)
                       }
@@ -320,10 +375,14 @@ class ManageEdit extends Component {
             }
           })
         }else{
+          data.map((item,index)=>{item.key=index;})
+          console.log("dynamictableData",data);
           return <FormItem
           label={values.title}
         >
-          {getFieldDecorator(`${values.name}`)
+          {getFieldDecorator(`${values.name}`, {
+                  initialValue: data,
+                })
             (<DynamicTable  setting={values.DynamicSet} />)}
         </FormItem>
         
@@ -341,7 +400,7 @@ class ManageEdit extends Component {
         }else if(isNew){//内部调用保存方法
           console.log("entersaveNewdispatch");
           this.props.dispatch({
-            type: saveNewDispatch,
+            type:  "ManageEditModel/saveNewTypeConfigure",
             payload: values,
             callback: () => {
               const { success, msg } = this.props.datachange;
@@ -373,13 +432,14 @@ class ManageEdit extends Component {
 
 
     render() {
-        const{ SourceSetting,id,dispatchType,initparams,loading,returnPath,isNew}=this.props;
-        console.log("renderManageEdit",this.props);
+        const { SourceSetting,dataEdit,id,dispatchType,initparams,loading,returnPath,isNew,dataNewProper}=this.props;
+        console.log("renderManageEditprops",this.props,"renderManageEditstate",this.state);
+       let realSourceSetting=this.state.newSourceSetting.length==0?SourceSetting:this.state.newSourceSetting;
         return (
             <PageHeaderWrapper>
               <Form onSubmit={this.submitHandler}>
              {loading&&!isNew?<Spin/>: 
-               SourceSetting.map(item=>{
+               realSourceSetting.map(item=>{
               return  <Card bordered={false} title={item.title}>
                 
                   {this.renderDetail(item)}
@@ -402,7 +462,8 @@ class ManageEdit extends Component {
     }
 }
 export default connect(({ ManageEditModel }) => ({
-    dataEdit: ManageEditModel.dataEdit.obj,//详情页数据源
+    dataEdit: ManageEditModel.dataEdit.obj,//编辑页数据源
+    dataNewProper: ManageEditModel.dataNewProper.obj,//新建页面特殊属性信息
     datachange:ManageEditModel.datachange,
     loading: ManageEditModel.loading,
 }))(Form.create()(ManageEdit))

@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { routerRedux, Route, Switch } from 'dva/router';
 import {router} from 'umi';
-import { Table, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber,Popconfirm, DatePicker, Modal, message, Divider, Tooltip, Radio } from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu,InputNumber,Popconfirm, DatePicker, Modal, message, Divider, Tooltip, Radio } from 'antd';
 import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './style.less';
@@ -141,16 +141,29 @@ class ManageList extends PureComponent {
     }
 
 
-    createHandler = () => {
-        const { dispatch,editPath } = this.props;
+    createHandler = (e) => {
+        console.log("createHandler",e);
+        const { dispatch,editPath,newType} = this.props;
         if(editPath!=''){
+            if(newType){
+                let {key}=e;
             router.push({
                 pathname: editPath,
                 params: {
                    isNew:true,
+                   newParam:key,
                     }
               });
+            }else{
+                router.push({
+                    pathname: editPath,
+                    params: {
+                       isNew:true,
+                        }
+                  });
+            }
           }
+          
         }
     
     reloadHandler = () => {
@@ -242,10 +255,13 @@ class ManageList extends PureComponent {
         console.log(this.props.storeInfo);
         const rowKey = record => record.id;//控制台不再报warning
         const {columns=[],isEdit,isDelete,isView,isRecover, editPath,viewPath,deleteDispatch,recoverDispatch,stateData,sidemenuAuth,match, dataList,loading,OtherOpeDispatch,OtherOpeLabel,
-            OtherRouteLabel,OtherRoutePath}= this.props;
+            OtherRouteLabel,OtherRoutePath,newType,newMenuOptions}= this.props;
         console.log("ManageListrender",this.props);
         const nowstate=eval(stateData);
         let viewOpe=<span/>,editOpe=<span/>,deleteOpe=<span/>,recoverOpe=<span/>,otherOpe=<span/>,otherRoute=<span/>;
+        let newMenuReal=<Menu onClick={this.createHandler}>
+            {newMenuOptions}
+        </Menu>
         if(isView&&viewPath==''){
                 viewOpe=<span style={{marginRight:20}}>查看</span>
         }
@@ -282,14 +298,15 @@ class ManageList extends PureComponent {
              title: '',
              key: 'row',
              align:'center',
-             render: (text, record, index) => <span>{index + 1 + ((current - 1) * pageSize)}</span>,
+             //render: (text, record, index) => <span>{index + 1 + ((current - 1) * pageSize)}</span>,
+             render: (text, record, index) => <span>{index + 1}</span>,
          };
      }else{
          columns.unshift({
           title: '',
          key: 'row',
          align:'center',
-         render: (text, record, index) => <span>{index + 1 + ((current - 1) * pageSize)}</span>,});
+         render: (text, record, index) => <span>{index + 1 }</span>,});
      }
           if(columns[columns.length-1].title!='操作'){
         columns.push(
@@ -349,8 +366,15 @@ class ManageList extends PureComponent {
                     <div className={styles.toolBar}>
                     {/* {
                             sidemenuAuth.length > 0 && arr.length > 0 && arr[0].co !== 'view' ? */}
+                            {newType&&newType=="Dropdown"?
+                           <Dropdown overlay={newMenuReal}>
+                          <a className="ant-dropdown-link">
+                            新建<Icon type="down" />
+                            </a>
+                         </Dropdown>
+                            :
                                 <Button style={{ marginBottom: 10 ,marginRight: 20}} type="primary" icon="plus" onClick={this.createHandler}>新建</Button>
-                                {/* : <span />
+                        }{/* : <span />
                         } */}
                         <div className={styles.searchForm}>
                             {this.renderForm()}
