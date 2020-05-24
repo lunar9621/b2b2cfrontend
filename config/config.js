@@ -107,38 +107,39 @@ export default {
               icon: 'smile',
               component: './Welcome',
             },
-            {
-              path: '/admin',
-              name: 'admin',
-              icon: 'crown',
-              component: './Admin',
-              authority: ['admin'],
-              routes: [
-                {
-                  path: '/admin/sub-page',
-                  name: 'sub-page',
-                  icon: 'smile',
-                  component: './Welcome',
-                  authority: ['admin'],
-                },
-              ],
-            },
-            {
-              name: '高级表单',
-              icon: 'smile',
-              path: '/formadvancedform',
-              component: './FormAdvancedForm',
-            },
-            {
-              name: 'table',
-              icon: 'smile',
-              path: '/testsearchform',
-              component: './testsearchForm',
-            },
+            // {
+            //   path: '/admin',
+            //   name: 'admin',
+            //   icon: 'crown',
+            //   component: './Admin',
+            //   authority: ['admin'],
+            //   routes: [
+            //     {
+            //       path: '/admin/sub-page',
+            //       name: 'sub-page',
+            //       icon: 'smile',
+            //       component: './Welcome',
+            //       authority: ['admin'],
+            //     },
+            //   ],
+            // },
+            // {
+            //   name: '高级表单',
+            //   icon: 'smile',
+            //   path: '/formadvancedform',
+            //   component: './FormAdvancedForm',
+            // },
+            // {
+            //   name: 'table',
+            //   icon: 'smile',
+            //   path: '/testsearchform',
+            //   component: './testsearchForm',
+            // },
             {
               name: '配置中心',
               icon: 'smile',
               path:'/ConfigureCenter',
+              authority: ['admin'],
               routes: [
                 {
                   name:'页面配置',
@@ -191,6 +192,15 @@ export default {
                   component:'./LocaleConfigure/ConfigureHome',
                 },
                 {
+                  name:"业务配置",
+                  path:"BusinessConfigure",
+                  component:'./BusinessConfigure/ConfigureHome',
+                },
+                {
+                  path: '/ConfigureCenter/BusinessConfigure/BusinessMake',
+                  component:'./BusinessConfigure/BusinessMake',
+                },
+                {
                   name:"类型配置",
                   path:"TypeManage",
                   component:'./TypeManage/TypeManageList',
@@ -218,16 +228,19 @@ export default {
               path: '/SelfInfo',
               name: '个人中心',
               icon: 'smile',
+              authority: ['admin'],
               component: './SelfInfo/View',
             },
             {
               path: '/SelfInfo/resetPWD',
+              authority: ['admin'],
               component: './SelfInfo/resetPWD',
             },
             {
               path: '/UserAndRole',
               name:'用户及角色管理',
               icon: 'smile',
+              authority: ['admin'],
               routes: [
                 {
                   path: '/UserAndRole/UserManage',
@@ -257,75 +270,90 @@ export default {
             {
               path: '/DepartmentManage',
               name:'部门管理',
+              authority: ['admin', 'user'],
               component:'./DepartmentManage/DepartmentList',
               icon: 'smile',
             },
             {
               path: '/DepartmentManage/Detail',
+              authority: ['admin', 'user'],
               component: './DepartmentManage/DepartmentDetail',
             },
             {
               path: '/DepartmentManage/Edit',
+              authority: ['admin', 'user'],
               component: './DepartmentManage/DepartmentEdit',
             },
             {
               path: '/CoopManage/dataSource=all',
               name:'合作方管理',
+              authority: ['admin', 'user'],
               component:'./CoopManage/CoopList',
               icon: 'smile',
             },
             {
               path: '/CoopManage/Detail',
+              authority: ['admin', 'user'],
               component: './CoopManage/CoopDetail',
             },
             {
               path: '/CoopManage/Edit',
+              authority: ['admin', 'user'],
               component: './CoopManage/CoopEdit',
             },
             {
               path: '/ContractManage',
               name:'合同管理',
+              authority: ['admin', 'user'],
               component:'./ContractManage/ContractList',
               icon: 'smile',
             },
             {
               path: '/ContractManage/Detail',
+              authority: ['admin', 'user'],
               component: './ContractManage/ContractDetail',
             },
             {
               path: '/ContractManage/Edit',
+              authority: ['admin', 'user'],
               component: './ContractManage/ContractEdit',
             },
             {
               path: '/CheckManage',
               name:'审核管理',
+              authority: ['admin', 'user'],
               component:'./CheckManage/CheckList',
               icon: 'smile',
             },
             {
-              path: '/CheckManage/Audit',
+              path: '/CheckManage/Edit',
+              authority: ['admin', 'user'],
               component: './CheckManage/CheckAudit',
             },
             {
               path: '/CoopManage',
+              authority: ['admin', 'user'],
               component:'./CoopManage/CoopList',
               rootKey:'CoopListtmp1',
               icon: 'smile',
             },
             {
               path: '/CoopManage',
+              authority: ['admin', 'user'],
               component:'./CoopManage/CoopList',
               rootKey:'CoopListtmp2',
               icon: 'smile',
             },
             {
               path: '/CoopManage',
+              authority: ['admin', 'user'],
               component:'./CoopManage/CoopList',
               rootKey:'CoopListtmp3',
               icon: 'smile',
             },
             {
               path: '/CoopManage',
+              authority: ['admin', 'user'],
               component:'./CoopManage/CoopList',
               rootKey:'CoopListtmp4',
               icon: 'smile',
@@ -365,6 +393,31 @@ export default {
               rootKey:'CheckListtmp5',
               component:'./CheckManage/CheckList',
               icon: 'smile',
+            },
+            {
+              path: '/NoticeView',
+              name:'公告查看',
+              authority: ['admin', 'user'],
+              component:'./noticeManage/noticeViewList',
+              icon: 'smile',
+            },
+            {
+              path: '/NoticeManage',
+              name:'公告管理',
+              authority: ['admin'],
+              component:'./noticeManage/noticeManageList',
+              icon: 'smile',
+            },
+            {
+              path: '/NoticeAdd',
+              authority: ['admin'],
+              component:'./noticeManage/noticeAdd',
+              icon: 'smile',
+            },
+            {
+              path: '/ContractManage/Pay',
+              authority: ['admin', 'user'],
+              component: './ContractManage/ContractPay',
             },
             {
               component: './404',

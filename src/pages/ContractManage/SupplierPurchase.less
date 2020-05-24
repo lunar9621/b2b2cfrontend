@@ -1,0 +1,129 @@
+.content {
+  background-color: #fff;
+  padding-right: 24px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.toolBar {
+  margin-bottom: 12px;
+}
+
+.searchForm {
+  display: inline-block;
+  // margin-left: 16px;
+  :global {
+    .ant-form-inline .ant-form-item {
+      margin-top: 12px;
+    }
+    button {
+      margin-top: 12px;
+    }
+  }
+}
+
+.card {
+  margin-bottom: 12px;
+}
+.inputnumber {
+  :global {
+    .ant-input-number {
+      margin-right: 0;
+      width: 100%;
+    }
+  }
+}
+
+.disabledFormStyleBorder {
+  :global {
+    .ant-input-disabled {
+      background-color: #fff;
+      opacity: 1;
+      color: rgba(0, 0, 0, 0.65);
+    }
+  }
+}
+
+.disabledFormStyle {
+  :global {
+    .ant-input-disabled {
+      background-color: #fff;
+      opacity: 1;
+      cursor: not-allowed;
+      color: rgba(0, 0, 0, 0.65);
+      border: 1px;
+    }
+    // .ant-input-number-input[disabled] {
+    //   background-color: #fff;
+    //   opacity: 1;
+    //   cursor: not-allowed;
+    //   color: rgba(0, 0, 0, 0.65);
+    //   border: 0;
+    //   // border-color: #fff;
+    // }
+    .ant-select-disabled .ant-select-selection {
+      background: #fff;
+      color: rgba(0, 0, 0, 0.65);
+      opacity: 1;
+      border: antiquewhite;
+      cursor: not-allowed;
+    }
+
+    .ant-radio-wrapper.ant-radio-wrapper-disabled:nth-child(1) {
+      span.ant-radio-disabled {
+        margin-left: 11px;
+      }
+    }
+    .ant-radio-wrapper.ant-radio-wrapper-disabled {
+      margin-right: 0;
+    }
+  }
+}
+
+.hideMarginBottom {
+  margin-bottom: 0;
+}
+
+.FooterToolbarContent {
+  margin-bottom: 68px;
+}
+
+.colFormInLine {
+  :global {
+    .ant-row {
+      display: inline-block;
+    }
+  }
+}
+
+.nohover {
+  :global {
+    .ant-table-tbody > tr.ant-table-row-hover > td,
+    .ant-table-tbody > tr:hover > td {
+      background: #fff;
+    }
+  }
+}
+
+.uploadInline {
+  :global {
+    .ant-upload-list {
+      display: inline-block;
+      margin-left: 12px;
+      .ant-upload-list-item {
+        margin-top: 0;
+        .ant-upload-list-item-name {
+          padding-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+.cardMinHeight {
+  :global {
+    .ant-card {
+      min-height: calc(~ '100vh - 114px');
+    }
+  }
+}

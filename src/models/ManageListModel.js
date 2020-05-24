@@ -1,5 +1,5 @@
 import {queryCoopList,queryUserList,queryTypeConfigureList,userManageResetPWD,userManageDelete,queryRoleList,roleManageDelete,
-  queryDepartmentList,departmentManageDelete,coopManageDelete} from '@/services/apilist';
+  queryDepartmentList,departmentManageDelete,coopManageDelete,queryContractList,queryCheckList} from '@/services/apilist';
 const ManageListModel = {
   namespace: 'ManageListModel',
   state: {
@@ -38,6 +38,23 @@ const ManageListModel = {
       })
       if(callback) callback();
     },
+    *fetchCheckList({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      console.log("entermodel",payload);
+      const data = yield call(queryCheckList,payload); 
+      yield put({
+        type: 'saveDataList',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
 
     *fetchCoopList({payload,callback}, { call, put}) {
       yield put({
@@ -46,6 +63,24 @@ const ManageListModel = {
       })
       console.log("entermodel",payload);
       const data = yield call(queryCoopList,payload); 
+      yield put({
+        type: 'saveDataList',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *fetchContractList({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      console.log("entermodel",payload);
+      const data = yield call(queryContractList,payload); 
       yield put({
         type: 'saveDataList',
         payload: data,

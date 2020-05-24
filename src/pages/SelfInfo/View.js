@@ -1,42 +1,52 @@
 import React from 'react';
 import { connect } from 'dva';
+import {router} from 'umi';
+import { Link } from 'dva/router';
 import { Card, Form, Input, InputNumber, Button, Radio, message, Select, Upload, Icon, Table, Spin } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+
+import FooterToolbar from '../../components/FooterToolbar';
 
 import styles from './SelfInfo.less';
 
 const FormItem = Form.Item;
 
-@connect(state => ({
-  infoObj: state.selfinfo.data.obj,
-  loading: state.selfinfo.loading,
-  submitLoading: state.selfinfo.submitLoading,
-  res: state.selfinfo.actionres,
-}))
-@Form.create()
-export default class SelfInfo extends React.Component {
+
+
+class View extends React.Component {
 
   state = {
     fileList: [],
   }
   
   componentDidMount() {
-    const { dispatch } = this.props;
-    this.props.dispatch({
-      type: 'selfinfo/fetchSelfInfo',
-      callback: () => {
-        if(this.props.infoObj.wechatUrl) {
-          this.setState({
-            fileList: [{
-              uid: -1,
-              name: '微信二维码',
-              status: 'done',
-              url: this.props.infoObj.wechatUrl,
-            }],
-          });
-        }
-      },
-    });
+    // const { dispatch } = this.props;
+     console.log("selfInfoprops",this.props);
+    // this.props.dispatch({
+    //   type: 'selfInfoModel/fetchSelfInfo',
+    //   callback: () => {
+    //     if(this.props.infoObj.wechatUrl) {
+    //       this.setState({
+    //         fileList: [{
+    //           uid: -1,
+    //           name: '微信二维码',
+    //           status: 'done',
+    //           url: this.props.infoObj.wechatUrl,
+    //         }],
+    //       });
+    //     }
+    //   },
+    // });
+    if(this.props.currentUser){
+      this.setState({
+                fileList: [{
+                  uid: -1,
+                  name: '微信二维码',
+                  status: 'done',
+                  url: this.props.currentUser.wechatUrl,
+                }],
+              });
+    }
   }
 
   
@@ -92,21 +102,22 @@ export default class SelfInfo extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if(err) return;
-      delete values.department;
-      delete values.role;
       if(this.state.fileList.length){
         values.wechatUrl = this.state.fileList[0].url;
       }
       else{
         delete  values.wechatUrl;
       }
-      console.log(values);
+      console.log("values",values);
       this.props.dispatch({
-        type: 'selfinfo/fetchModify',
+        type: 'selfInfoModel/fetchModify',
         payload: values,
         callback: () => {
-          const { success, msg } = this.props.res;
-          if(success) message.success(msg);
+          const { success, msg } = this.props.datachange;
+          if(success){ message.success(msg);
+             router.push({
+            pathname: '/',
+          });}
           else message.error(msg);
         },
       })
@@ -114,7 +125,9 @@ export default class SelfInfo extends React.Component {
   }
 
   render() {
-    const { loading, infoObj, submitLoading } = this.props;
+    const { currentUser, submitLoading } = this.props;
+    var userkeys=Object.keys(currentUser);
+    console.log("renderprops",this.props);
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -138,15 +151,15 @@ export default class SelfInfo extends React.Component {
         <Card bordered={false} className={styles.card}>
           <div>
             {
-              loading ? <div style={{textAlign: 'center', marginTop: 30}}><Spin size="large" /></div> :
+              userkeys.length==0 ? <div style={{textAlign: 'center', marginTop: 30}}><Spin size="large" /></div> :
               <Form onSubmit={this.submitHandler} layout="horizontal" className={styles.disabledFormStyleBorder}>
                 <FormItem 
                   label="用户名"
                   {...formItemLayout}
                 >
                   {
-                    getFieldDecorator('username', {
-                      initialValue: infoObj.username,
+                    getFieldDecorator('userName', {
+                      initialValue: currentUser.userName,
                     })(<Input disabled placeholder="请输入用户名" />)
                   }
                 </FormItem>
@@ -156,7 +169,7 @@ export default class SelfInfo extends React.Component {
                 >
                   {
                     getFieldDecorator('name', {
-                      initialValue: infoObj.name,
+                      initialValue: currentUser.name,
                     })(<Input disabled placeholder="请输入姓名" />)
                   }
                 </FormItem>
@@ -166,7 +179,7 @@ export default class SelfInfo extends React.Component {
                 >
                   {
                     getFieldDecorator('role', {
-                      initialValue: infoObj.role ? infoObj.role.name : null,
+                      initialValue: currentUser.role ? currentUser.role : null,
                     })(<Input disabled placeholder="请输入角色名" />)
                   }
                 </FormItem>
@@ -176,7 +189,7 @@ export default class SelfInfo extends React.Component {
                 >
                   {
                     getFieldDecorator('department', {
-                      initialValue: infoObj.department ? infoObj.department.fullName : null,
+                      initialValue: currentUser.department ? currentUser.department : null,
                     })(<Input disabled placeholder="请输入部门" />)
                   }
                 </FormItem>
@@ -185,7 +198,7 @@ export default class SelfInfo extends React.Component {
                   {...formItemLayout}
                 >
                   {getFieldDecorator('mobile', {
-                      initialValue: infoObj.mobile,
+                      initialValue: currentUser.mobile,
                     })(
                     <Input placeholder='请输入手机号' />
                   )}
@@ -195,7 +208,7 @@ export default class SelfInfo extends React.Component {
                   {...formItemLayout}
                 >
                   {getFieldDecorator('qq', {
-                      initialValue: infoObj.qq,
+                      initialValue: currentUser.qq,
                     })(
                     <Input placeholder='请输入QQ号' />
                   )}
@@ -205,12 +218,12 @@ export default class SelfInfo extends React.Component {
                   {...formItemLayout}
                 >
                   {getFieldDecorator('wechat', {
-                      initialValue: infoObj.wechat,
+                      initialValue: currentUser.wechat,
                     })(
                     <Input placeholder='请输入微信号' />
                   )}
                 </FormItem>
-                <FormItem 
+                {/* <FormItem 
                   label="微信二维码"
                   {...formItemLayout}
                 >
@@ -229,9 +242,9 @@ export default class SelfInfo extends React.Component {
                       </Button>
                     </Upload>
                   )}
-                </FormItem>
+                </FormItem> */}
                 <FooterToolbar> <Button type="primary" htmlType="submit" loading={submitLoading}>保存</Button >
-                    <Link to={{ pathname: "resetPWD", query: { id: 0} }} style={{marginRight:12}}>
+                    <Link to={{ pathname: "resetPWD", query: { id: 0} }} style={{marginLeft:12}}>
                         <Button type="primary" >修改密码</Button >
                     </Link>
             </FooterToolbar>
@@ -244,3 +257,11 @@ export default class SelfInfo extends React.Component {
   }
 
 }
+
+export default connect(({ selfInfoModel,login}) => ({
+  // infoObj: selfInfoModel.data.obj,
+  loading:selfInfoModel.loading,
+  submitLoading: selfInfoModel.submitLoading,
+  datachange: selfInfoModel.datachange,
+  currentUser:login.currentUser,
+}))(Form.create()(View))

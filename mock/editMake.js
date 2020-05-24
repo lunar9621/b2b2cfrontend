@@ -95,7 +95,7 @@ function getFakeCaptcha(req, res) {
             msg:"成功",
             obj:{
               editData:[{name:"CoopInfo",type:"object",display:"",field:[{name:"coopName",type:"string"},{name:"creator",type:"string"},{name:"createDate", type:"date"},
-              {name:"createDate", type:"date"},{name:"createDate", type:"date"}]},
+              {name:"address", type:"date"},{name:"contacts", type:"date"},{name:"phone", type:"date"}]},
             
             ],                     
               specialEvent:[],
@@ -151,6 +151,20 @@ function getFakeCaptcha(req, res) {
     res.send({
       success: true,
        msg:"新建部门成功",
+    });
+  },
+
+  'POST /api/editMake/saveBusinessMake': (req, res) => {
+    res.send({
+      success: true,
+       msg:"配置成功",
+    });
+  },
+
+  'POST /api/editMake/saveAuditResult': (req, res) => {
+    res.send({
+      success: true,
+       msg:"保存成功",
     });
   },
 

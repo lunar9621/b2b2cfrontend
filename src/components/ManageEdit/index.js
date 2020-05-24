@@ -120,6 +120,23 @@ class ManageEdit extends Component {
 
     renderDetail=(values)=>{
       let {getFieldDecorator,getFieldValue}=this.props.form;
+      const formItemLayout = {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 7 },
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 12 },
+          md: { span: 10 },
+        },
+      };
+      const submitFormLayout = {
+        wrapperCol: {
+          xs: { span: 24, offset: 0 },
+          sm: { span: 10, offset: 7 },
+        },
+      };
       const editorProps = {
         height: 350,
         contentFormat: 'html',
@@ -223,7 +240,7 @@ class ManageEdit extends Component {
             switch (item.component){
               case "Input":
                 return  <FormItem
-                  label={item.name}>
+                  label={item.name}  {...formItemLayout}>
                   {
                     getFieldDecorator(`${item.field}`, {
                       initialValue:isNew?item.defaultValue:data[item.field],
@@ -233,7 +250,7 @@ class ManageEdit extends Component {
                 </FormItem>
               case "TextArea":
                 return  <FormItem
-                    label={item.name}>
+                    label={item.name}  {...formItemLayout}>
                   {
                     getFieldDecorator(`${item.field}`, {
                       initialValue:isNew?item.defaultValue:data[item.field],
@@ -243,7 +260,7 @@ class ManageEdit extends Component {
                 </FormItem>
               case "InputNumber":
                 return  <FormItem
-                    label={item.name}>
+                    label={item.name}  {...formItemLayout}>
                   {
                     getFieldDecorator(`${item.field}`, {
                       initialValue:isNew?item.defaultValue:data[item.field],
@@ -260,7 +277,7 @@ class ManageEdit extends Component {
                   options.push(opt);
                 }
                   return  <FormItem
-                      label={item.name}>
+                      label={item.name}  {...formItemLayout}>
                     {
                       getFieldDecorator(`${item.field}`, {
                         initialValue:isNew?item.defaultValue:data[item.field],
@@ -276,7 +293,7 @@ class ManageEdit extends Component {
                   </FormItem>
               case "Switch":
                     return  <FormItem
-                        label={item.name}>
+                        label={item.name}  {...formItemLayout}>
                       {
                         getFieldDecorator(`${item.field}`, {
                           initialValue:isNew?item.defaultValue:data[item.field],
@@ -286,7 +303,7 @@ class ManageEdit extends Component {
                     </FormItem>
               case "DatePicker":
                     return  <FormItem
-                        label={item.name}>
+                        label={item.name}  {...formItemLayout}>
                       {
                         getFieldDecorator(`${item.field}`, {
                           initialValue:isNew?moment(item.defaultValue):moment(data[item.field]),
@@ -296,7 +313,7 @@ class ManageEdit extends Component {
                     </FormItem>
               case "TimePicker":
                     return  <FormItem
-                        label={item.name}>
+                        label={item.name}  {...formItemLayout}>
                       {
                         getFieldDecorator(`${item.field}`, {
                           initialValue:isNew?item.defaultValue:data[item.field],
@@ -313,7 +330,7 @@ class ManageEdit extends Component {
                       options.push(opt);
                     }
                     return  <FormItem
-                        label={item.name}>
+                        label={item.name}  {...formItemLayout}>
                       {
                         getFieldDecorator(`${item.field}`, {
                           initialValue:isNew?item.defaultValue:data[item.field],
@@ -334,7 +351,7 @@ class ManageEdit extends Component {
                     options.push(opt);
                   }
                   return  <FormItem
-                      label={item.name}>
+                      label={item.name}  {...formItemLayout}>
                     {
                       getFieldDecorator(`${item.field}`, {
                         initialValue:isNew?item.defaultValue:data[item.field],
@@ -346,14 +363,14 @@ class ManageEdit extends Component {
                   </FormItem>
               case "BraftEditor":
                     return  <FormItem
-                        label={item.name}>
+                        label={item.name}  {...formItemLayout}>
                     <div>
                     <BraftEditor {...editorProps} />
                   </div>
                     </FormItem>
               case "Upload":
                     return   <FormItem
-                        label={item.name}>
+                        label={item.name}  {...formItemLayout}>
                       {
                         getFieldDecorator(`${item.field}`, {
                           initialValue:isNew?item.defaultValue:data[item.field],
@@ -390,7 +407,7 @@ class ManageEdit extends Component {
   }
 
     submitHandler = (e) => {
-      let {saveHandler,isNew,saveNewDispatch,saveEditDispatch}=this.props;
+      let {saveHandler,isNew,saveNewDispatch,saveEditDispatch,AfterSavePath}=this.props;
       console.log("entersubmithandler",this.props);
       e.preventDefault();
       this.props.form.validateFields((err, values) => {
@@ -400,11 +417,20 @@ class ManageEdit extends Component {
         }else if(isNew){//内部调用保存方法
           console.log("entersaveNewdispatch");
           this.props.dispatch({
-            type:  "ManageEditModel/saveNewTypeConfigure",
+            type: saveNewDispatch,
             payload: values,
             callback: () => {
               const { success, msg } = this.props.datachange;
-              if(success) message.success(msg);
+              if(success) {
+                message.success(msg);
+                if(AfterSavePath){
+                  router.push({
+                    pathname: AfterSavePath,
+                  }) 
+                }else{
+                this.returnHandler();
+                }
+              }
               else message.error(msg);
             },
           })
@@ -434,6 +460,23 @@ class ManageEdit extends Component {
     render() {
         const { SourceSetting,dataEdit,id,dispatchType,initparams,loading,returnPath,isNew,dataNewProper}=this.props;
         console.log("renderManageEditprops",this.props,"renderManageEditstate",this.state);
+        const formItemLayout = {
+          labelCol: {
+            xs: { span: 24 },
+            sm: { span: 7 },
+          },
+          wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 12 },
+            md: { span: 10 },
+          },
+        };
+        const submitFormLayout = {
+          wrapperCol: {
+            xs: { span: 24, offset: 0 },
+            sm: { span: 10, offset: 7 },
+          },
+        };
        let realSourceSetting=this.state.newSourceSetting.length==0?SourceSetting:this.state.newSourceSetting;
         return (
             <PageHeaderWrapper>

@@ -122,6 +122,7 @@ class CoopEdit extends PureComponent {
                     newParam={newParam}
                     saveEditDispatch='ManageEditModel/saveCoopEdit'
                     saveNewDispatch="ManageEditModel/saveNewCoop"
+                    AfterSavePath="/ContractManage/Edit"
                     newDispatchType="ManageEditModel/fetchCoopNewProper"
                     returnPath="/CoopManage/dataSource=all"
                 > 

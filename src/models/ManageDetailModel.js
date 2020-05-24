@@ -1,4 +1,4 @@
-import {queryCoopDetail,queryDepartmentDetail,queryTypeConfigureDetail} from '@/services/apidetail';
+import {queryCoopDetail,queryDepartmentDetail,queryTypeConfigureDetail,queryContractDetail} from '@/services/apidetail';
 const ManageDetailModel = {
   namespace: 'ManageDetailModel',
   state: {
@@ -22,6 +22,24 @@ const ManageDetailModel = {
       })
       console.log("entermodel",payload);
       const data = yield call(queryCoopDetail,payload); 
+      yield put({
+        type: 'saveDataDetail',
+        payload: data,
+      });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *fetchContractDetail({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      console.log("entermodel",payload);
+      const data = yield call(queryContractDetail,payload); 
       yield put({
         type: 'saveDataDetail',
         payload: data,

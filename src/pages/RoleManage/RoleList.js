@@ -287,6 +287,12 @@ class RoleList extends PureComponent {
   // }
 
   render() {
+    let searchForm=[{
+      label: "角色名称",
+      value: "name",
+      wrapperWidth: 200,
+      type: "input"
+  }];
     let columns = [
       {
         title: '角色名称',
@@ -304,7 +310,7 @@ class RoleList extends PureComponent {
       },
     ];
 let isEdit=true,isDelete=true,isView=false,isRecover=false;
-let searchForm=[],initOption={};
+let initOption={};
    return ( <ManageList
               dispatchType="ManageListModel/fetchRoleList"
               initOption={initOption}

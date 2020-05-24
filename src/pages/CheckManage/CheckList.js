@@ -73,42 +73,56 @@ class CheckList extends PureComponent {
   render() {
     let columns = [
       {
-        title: '供应商名称',
-        dataIndex: 'supplierName',
+        title: '合同号',
+        dataIndex: 'contractCode',
         width: '12%',
         align: 'center',
-        key: 'supplierName',
+        key: 'contractCode',
       } ,{
-        title: '创建人',
-        dataIndex: 'Operator',
+        title: '生效时间',
+        dataIndex: 'startDate',
         width: '12%',
-        key: 'Operator',
+        key: 'startDate',
+      },{
+        title: '失效时间',
+        dataIndex: 'deadDate',
+        width: '12%',
+        key: 'deadDate',
+      },{
+        title: '联系方式',
+        dataIndex: 'mobile',
+        width: '12%',
+        key: 'mobile',
+      },
+      {
+        title: '负责人',
+        dataIndex: 'name',
+        width: '12%',
+        key: 'name',
       }
     ];
     let searchForm=[
-        {label: "供应商名称",
-    value: "supplierName",
+        {label: "合同号",
+    value: "contractCode",
     wrapperWidth: 200,
     type: "input"},
     {
-    label: "创建日期",
-    value: "Date",
+    label: "负责人",
+    value: "name",
     wrapperWidth: 200,
-    type: "datePicker",
+    type: "input",
     }
    ];
-let isEdit=true,isDelete=true,isView=true,isRecover=false;
+let isEdit=true,isDelete=false,isView=false,isRecover=false;
    return ( <ManageList
-              dispatchType="ManageListModel/fetchCoopList"
-              initOption={{
-                  status:"0"
-              }}
+              dispatchType="ManageListModel/fetchCheckList"
+              initOption={{}}
               columns={columns}
               stateData="dataList"
               searchForm={searchForm}
-              editPath="/CoopManage/Edit"
-              viewPath="/CoopManage/Detail"
-              deleteDispatch="ManageListModel/coopManageDelete"
+              editPath="/CheckManage/Edit"
+              viewPath="/CheckManage/Detail"
+              deleteDispatch="ManageListModel/checkManageDelete"
               recoverDispatch={''}
               isEdit={isEdit}
               isDelete={isDelete}

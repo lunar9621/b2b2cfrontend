@@ -1,24 +1,31 @@
 import request from '@/utils/request';
 //queryzhcnConfigure,queryzhtwConfigure,queryenusConfigure,queryptbrConfigure
 export async function queryzhcnConfigure() {
-    return request(`/api/localeConf/queryzhcnConf`);
+    return request(`/apikoa/localeConf/queryzhcnConf`);
 }
 export async function queryzhtwConfigure() {
-    return request(`/api/localeConf/queryzhtwConf`);
+    return request(`/apikoa/localeConf/queryzhtwConf`);
 }
 
 export async function queryenusConfigure() {
-    return request(`/api/localeConf/queryenusConf`);
+    return request(`/apikoa/localeConf/queryenusConf`);
 }
 
 export async function queryptbrConfigure() {
-    return request(`/api/localeConf/queryptbrConf`);
+    return request(`/apikoa/localeConf/queryptbrConf`);
+}
+//queryLocalConfigure
+export async function queryLocalConfigure() {
+    return request(`/apikoa/localeConf/queryLocalConf`);
 }
 
 export async function queryMyLocalConfigure() {
-    return request(`/api/localeConf/querymylocalConf`);
+    return request(`/apikoa/localeConf/querymylocalConf`);
 }
-
-export async function queryDetailSetting(id) {
-return request(`/api/detailMake/queryDetailSetting?id=${id}`);
+//saveLocaleConf
+export async function saveLocaleConf(params) {
+    return request('/apikoa/localeConf/saveLocaleConf', {
+        method: 'POST',
+        data: params,
+      });
 }

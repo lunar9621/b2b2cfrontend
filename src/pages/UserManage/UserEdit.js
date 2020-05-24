@@ -78,7 +78,7 @@ class UserEdit extends PureComponent {
             FormSet:[
                 {
                     name: "用户名",
-                    field: "username",
+                    field: "userName",
                     isRequired: "是",
                     disabled: "",
                     defaultValue: "",

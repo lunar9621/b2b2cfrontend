@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import ContractPay from '@/pages/ContractManage/ContractPay';
 //queryListMakeSource,queryListSetting
 export async function queryUserEdit(params){
     return request(`/api/editMake/queryUserEdit?ID=${JSON.stringify(params)}`);
@@ -12,7 +13,7 @@ export async function saveUserEdit(params) {
 }
 
 export async function saveNewUser(params) {
-    return request('/api/editMake/saveNewUser', {
+    return request('/apikoa/editMake/saveNewUser', {
         method: 'POST',
         data: params,
       });
@@ -106,6 +107,37 @@ export async function saveTypeConfigureEdit(params) {
 
   export async function saveNewTypeConfigure(params) {
     return request('/apikoa/editMake/saveNewTypeConfigure', {
+      method: 'POST',
+      data: params,
+    });
+  }
+  //ContractPay,SubmitToAudit
+  export async function contractPay(params) {
+    return request('/apikoa/editMake/contractPay', {
+      method: 'POST',
+      data: params,
+    });
+  }
+
+  export async function SubmitToAudit(params) {
+    return request('/apikoa/editMake/SubmitToAudit', {
+      method: 'POST',
+      data: params,
+    });
+  }
+
+  //saveBusinessMake
+  export async function saveBusinessMake(params) {
+    return request('/api/editMake/saveBusinessMake', {
+      method: 'POST',
+      data: params,
+    });
+  }
+
+
+  // saveAuditResult
+  export async function saveAuditResult(params) {
+    return request('/apikoa/editMake/saveAuditResult', {
       method: 'POST',
       data: params,
     });

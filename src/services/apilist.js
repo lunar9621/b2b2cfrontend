@@ -4,6 +4,10 @@ export async function queryCoopList(params) {
     return request(`/apikoa/listMake/queryCoopList?${params}`);
 }
 
+export async function queryContractList(params) {
+    return request(`/apikoa/listMake/queryContractList?${params}`);
+}
+
 export async function queryTypeConfigureList(params) {
     return request(`/apikoa/listMake/queryTypeConfigureList?${params}`);
 }
@@ -12,7 +16,7 @@ return request(`/api/listMake/queryListSetting?id=${id}`);
 }
 
 export async function queryUserList(params) {
-    return request(`/api/listMake/queryUserList?${JSON.stringify(params)}`);
+    return request(`/apikoa/listMake/queryUserList?${params}`);
 }
 
 export async function userManageResetPWD(params) {
@@ -37,11 +41,11 @@ export async function coopManageDelete(params) {
 }
 
 export async function queryRoleList(params) {
-    return request(`/api/listMake/queryRoleList?${JSON.stringify(params)}`);
+    return request(`/api/listMake/queryRoleList?${params}`);
 }
 
 export async function queryDepartmentList(params) {
-    return request(`/api/listMake/queryDepartmentList?${JSON.stringify(params)}`);
+    return request(`/api/listMake/queryDepartmentList?${params}`);
 }
 
 export async function roleManageDelete(params) {
@@ -56,4 +60,8 @@ export async function departmentManageDelete(params) {
         method: 'POST',
         data: params,
       });
+}
+
+export async function queryCheckList(params) {
+    return request(`/apikoa/listMake/queryCheckList?${params}`);
 }

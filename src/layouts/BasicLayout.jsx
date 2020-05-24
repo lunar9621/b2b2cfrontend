@@ -37,7 +37,6 @@ const menuDataRender = menuList =>
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright="2019 蚂蚁金服体验技术部出品"
     links={[
       {
         key: 'Ant Design Pro',
@@ -100,13 +99,13 @@ const BasicLayout = props => {
    * constructor
    */
 
-  useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (dispatch) {
+  //     dispatch({
+  //       type: 'login/fetchCurrent',
+  //     });
+  //   }
+  // }, []);
   /**
    * init variables
    */
@@ -158,7 +157,7 @@ const BasicLayout = props => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      footerRender={footerRender}
+      // footerRender={footerRender}
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={() => <RightContent />}
@@ -172,7 +171,7 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings }) => ({
-  collapsed: global.collapsed,
+export default connect(({ noticeModel, settings }) => ({
+  collapsed: noticeModel.collapsed,
   settings,
 }))(BasicLayout);

@@ -1,12 +1,13 @@
 import { stringify } from 'querystring';
 import { router } from 'umi';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
+import { fakeAccountLogin, getFakeCaptcha,queryCurrent } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 const Model = {
   namespace: 'login',
   state: {
     status: undefined,
+    currentUser: {},
   },
   effects: {
     *login({ payload }, { call, put }) {
@@ -17,13 +18,14 @@ const Model = {
       }); // Login successfully
 
       if (response.status === 'ok') {
+        console.log("locationhref",window.location.href);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
 
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
-
+          console.log("redirectUrlParams:",redirectUrlParams,"urlParams",urlParams);
           if (redirectUrlParams.origin === urlParams.origin) {
             redirect = redirect.substr(urlParams.origin.length);
 
@@ -34,10 +36,19 @@ const Model = {
             window.location.href = '/';
             return;
           }
+          console.log("redirect",redirect);
         }
 
         router.replace(redirect || '/');
       }
+    },
+
+    *fetchCurrent(_, { call, put }) {
+      const response = yield call(queryCurrent);
+      yield put({
+        type: 'saveCurrentUser',
+        payload: response,
+      });
     },
 
     *getCaptcha({ payload }, { call }) {
@@ -58,6 +69,12 @@ const Model = {
     },
   },
   reducers: {
+    saveCurrentUser(state, { payload }) {
+      return {
+        ...state,
+        currentUser: payload,
+      };
+    },
     changeLoginStatus(state, { payload }) {
       setAuthority(payload.currentAuthority);
       return { ...state, status: payload.status, type: payload.type };

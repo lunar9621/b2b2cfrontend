@@ -6,7 +6,6 @@ import localStorageDB from 'localstoragedb';
 const { SubMenu } = Menu;
 
 
-@Form.create()
 class CoopList extends PureComponent {
 
   state = {  

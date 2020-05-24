@@ -316,12 +316,12 @@ class ManageList extends PureComponent {
         align: 'center',
         render: (record) =>  {
          return    <span>
-                {viewPath?<Link to={{ pathname: viewPath, params: { ViewParam: record, isEdit: false } }} style={{marginRight:20}}>查看</Link>:viewOpe}
-                {editPath?<Link to={{ pathname: editPath, params: { EditParam: record, isNew: false } }} style={{marginRight:20}}>编辑</Link>:editOpe}
-                {deleteDispatch?<Popconfirm title="确定删除?" onConfirm={this.deleteHandler.bind(null,record)}>
+                {isView&&viewPath?<Link to={{ pathname: viewPath, params: { ViewParam: record, isEdit: false } }} style={{marginRight:20}}>查看</Link>:viewOpe}
+                {isEdit&&editPath?<Link to={{ pathname: editPath, params: { EditParam: record, isNew: false } }} style={{marginRight:20}}>编辑</Link>:editOpe}
+                {isDelete&&deleteDispatch?<Popconfirm title="确定删除?" onConfirm={this.deleteHandler.bind(null,record)}>
                 <a style={{marginRight:20}}>删除</a>
               </Popconfirm>:deleteOpe}
-                {recoverDispatch?<Popconfirm title="确定恢复?" onConfirm={this.recoverHandler.bind(null,record)}>
+                {isRecover&&recoverDispatch?<Popconfirm title="确定恢复?" onConfirm={this.recoverHandler.bind(null,record)}>
                 <a style={{marginRight:20}}>恢复</a>
               </Popconfirm>:recoverOpe}
                 {OtherOpeDispatch?<Popconfirm  title="确定进行此操作?" onConfirm={this.otherOpeHandler.bind(null,record)}>

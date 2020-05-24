@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi-plugin-react/locale';
-import { Card, Typography, Alert, Form } from 'antd';
+import { Card, Typography, Alert, Form,List } from 'antd';
 import { connect } from 'dva';
 import styles from './Welcome.less';
 import zhcn from '../locales/zh-CN';
@@ -63,107 +63,82 @@ console.log("queryresult",result);
     locale=ptbr;
   }
   dispatch({
-    type: 'localeConfModel/fetchzhcnConfigure',
+    type: 'localeConfModel/fetchLocalConfigure',
     callback: () => {
-      let { dataZhcn } = this.props;
-      Object.assign(zhcn,dataZhcn);
+      let { dataLocal } = this.props;
+     // Object.assign(zhcn,dataLocal);
     }
   });
+  // dispatch({
+  //   type: 'localeConfModel/fetchzhcnConfigure',
+  //   callback: () => {
+  //     let { dataZhcn } = this.props;
+  //     Object.assign(zhcn,dataZhcn);
+  //   }
+  // });
+  // dispatch({
+  //   type: 'localeConfModel/fetchzhtwConfigure',
+  //   callback: () => {
+  //     let { dataZhtw } = this.props;
+  //     Object.assign(zhtw,dataZhtw);
+  //   }
+  // })
+  // dispatch({
+  //   type: 'localeConfModel/fetchenusConfigure',
+  //   callback: () => {
+  //     let { dataEnus } = this.props;
+  //     Object.assign(zhcn,dataEnus);
+  //   }
+  // })
+  // dispatch({
+  //   type: 'localeConfModel/fetchptbrConfigure',
+  //   callback: () => {
+  //     let { dataPtbr } = this.props;
+  //     Object.assign(ptbr,dataPtbr);
+  //   }
+  // })
+  // dispatch({
+  //   type: 'localeConfModel/fetchMyLocalConfigure',
+  //   callback: () => {
+  //     let { dataMyLocal } = this.props;
+  //     for(let key in dataMyLocal){
+  //       if(key!=''){//如果key有名字，即指定了自定义语言名
+  //     Object.assign(myLocal,dataMyLocal[key]);
+  //     }
+  //   }
+  //   }
+  // })
   dispatch({
-    type: 'localeConfModel/fetchzhtwConfigure',
-    callback: () => {
-      let { dataZhtw } = this.props;
-      Object.assign(zhtw,dataZhtw);
-    }
+    type: 'noticeModel/fetchNotices',
   })
-  dispatch({
-    type: 'localeConfModel/fetchenusConfigure',
-    callback: () => {
-      let { dataEnus } = this.props;
-      Object.assign(zhcn,dataEnus);
-    }
-  })
-  dispatch({
-    type: 'localeConfModel/fetchptbrConfigure',
-    callback: () => {
-      let { dataPtbr } = this.props;
-      Object.assign(ptbr,dataPtbr);
-    }
-  })
-  dispatch({
-    type: 'localeConfModel/fetchMyLocalConfigure',
-    callback: () => {
-      let { dataMyLocal } = this.props;
-      for(let key in dataMyLocal){
-        if(key!=''){//如果key有名字，即指定了自定义语言名
-      Object.assign(myLocal,dataMyLocal[key]);
-      }
-    }
-    }
-  })
-  }
+}
 
   render(){
+    let {notices,noticeLoading}=this.props;
+    console.log("welcomeprops",this.props);
     return (
   <PageHeaderWrapper>
-    <Card>
-      <Alert
-        message="umi ui 现已发布，点击右下角 umi 图标即可使用"
-        type="success"
-        showIcon
-        banner
-        style={{
-          margin: -12,
-          marginBottom: 24,
-        }}
-      />
-      <Typography.Text strong>
-        <a target="_blank" rel="noopener noreferrer" href="https://pro.ant.design/docs/block">
-          <FormattedMessage
-            id="app.welcome.link.block-list"
-           // defaultMessage="基于 block 开发，快速构建标准页面"
-          />
-        </a>
-      </Typography.Text>
-      <CodePreview> npm run ui</CodePreview>
-      <Typography.Text
-        strong
-        style={{
-          marginBottom: 12,
-        }}
-      >
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://pro.ant.design/docs/available-script#npm-run-fetchblocks"
-        >
-        {/* <FormattedMessage id="app.welcome.link.fetch-blocks" defaultMessage="获取全部区块" /> */}
-        {locale['app.welcome.link.block-list']}
-        </a>
-      </Typography.Text>
-      <CodePreview> npm run fetch:blocks</CodePreview>
+    <Card title={locale.latestNotice} bordered={false}>
+                <List
+                  size="small"
+                  bordered={false}
+                  split={false}
+                  dataSource={noticeLoading?[]:notices.rows}
+                  // renderItem={item => (<List.Item actions={[<span>{moment(item.date).format("YYYY-MM-DD")}</span>]}>{item.title}</List.Item>)}
+                  renderItem={item => (<List.Item > <List.Item.Meta
+                    title={item.name}
+                    description={item.content}
+                  /></List.Item>)}
+                />
     </Card>
-    <p
-      style={{
-        textAlign: 'center',
-        marginTop: 24,
-      }}
-    >
-      Want to add more pages? Please refer to{' '}
-      <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
-        use block
-      </a>
-      。
-    </p>
   </PageHeaderWrapper>
     )
   }
 }
-export default connect(({ localeConfModel }) => ({
-  dataZhcn: localeConfModel.dataZhcn.obj,//列表页数据源
-  dataZhtw: localeConfModel.dataZhtw.obj,
-  dataEnus: localeConfModel.dataEnus.obj,
-  dataPtbr: localeConfModel.dataPtbr.obj,
+export default connect(({ localeConfModel,noticeModel }) => ({
+  dataLocal: localeConfModel.dataLocal.obj,//列表页数据源
   dataMyLocal: localeConfModel.dataMyLocal.obj,
+  notices:noticeModel.noticeList.obj,
+  noticeLoading:noticeModel.noticeLoading,
   loading: localeConfModel.loading,
 }))(Form.create()(Welcome))

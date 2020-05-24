@@ -1,27 +1,52 @@
-import { queryNotices } from '@/services/user';
-const GlobalModel = {
-  namespace: 'global',
+import { queryNotices,queryNoticeDetail } from '@/services/user';
+const noticeModel = {
+  namespace: 'noticeModel',
   state: {
     collapsed: false,
-    notices: [],
+    noticeList: {
+      success:true,
+      msg:'',
+      obj:{},
+    },
+    noticeDetail: {
+      success: "",
+      msg: "",
+      obj: {
+      },
+    },
+    noticeLoading:true,
   },
   effects: {
     *fetchNotices(_, { call, put, select }) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
       const data = yield call(queryNotices);
       yield put({
         type: 'saveNotices',
         payload: data,
       });
-      const unreadCount = yield select(
-        state => state.global.notices.filter(item => !item.read).length,
-      );
       yield put({
-        type: 'user/changeNotifyCount',
-        payload: {
-          totalCount: data.length,
-          unreadCount,
-        },
+        type:'dataLoading',
+        payload:false,
+      })
+    },
+
+    *fetchNoticeDetail({payload,callback}, { call, put}) {
+      yield put({
+        type:'dataLoading',
+        payload:true,
+      })
+      const data = yield call(queryNoticeDetail,payload);
+      yield put({
+        type: 'saveNoticeDetail',
+        payload: data,
       });
+      yield put({
+        type:'dataLoading',
+        payload:false,
+      })
     },
 
     *clearNotices({ payload }, { put, select }) {
@@ -68,9 +93,16 @@ const GlobalModel = {
     },
   },
   reducers: {
+    dataLoading(state,{payload}){
+      return {
+        ...state,
+        noticeLoading:payload,
+      };
+    },
+
     changeLayoutCollapsed(
       state = {
-        notices: [],
+        noticeList: {},
         collapsed: true,
       },
       { payload },
@@ -80,9 +112,15 @@ const GlobalModel = {
 
     saveNotices(state, { payload }) {
       return {
-        collapsed: false,
         ...state,
-        notices: payload,
+        noticeList: payload,
+      };
+    },
+
+    saveNoticeDetail(state, { payload }) {
+      return {
+        ...state,
+         noticeDetail: payload,
       };
     },
 
@@ -111,4 +149,4 @@ const GlobalModel = {
     },
   },
 };
-export default GlobalModel;
+export default noticeModel;

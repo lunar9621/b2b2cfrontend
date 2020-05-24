@@ -1,4 +1,4 @@
-import { Button,Card,Form,Select,Input} from 'antd';
+import { Button,Card,Form,Select,Input,message} from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 import { Link } from 'umi';
@@ -28,27 +28,11 @@ class ConfigureHome extends Component {
     let initValue=[];
     let myLocalName='';
     dispatch({
-      type: 'localeConfModel/fetchMyLocalConfigure',
+      type: 'localeConfModel/fetchLocalConfigure',
       callback: () => {
-        let { dataMyLocal } = this.props;
-        for(let key in dataMyLocal){
-          if(key!=''){
-          myLocalName=key;
-        }
-      }
-      for(let id in zhcn){
-        let tmpLang={};
-        tmpLang.ID=id;
-        tmpLang.zhCN=zhcn[id];
-        tmpLang.zhTW=zhtw[id]?zhtw[id]:'';
-        tmpLang.enUS=enus[id]?enus[id]:'';
-        tmpLang.ptBR=ptbr[id]?ptbr[id]:'';
-        tmpLang.myLocal=myLocal[id]?myLocal[id]:'';
-       initValue.push(tmpLang);
-       }
-       console.log("initValue",initValue);
+        let { dataLocal:{isHaveLocalName,myLocalName,LocaleConfigure} } = this.props;
        this.setState({
-         initValue,
+         initValue:LocaleConfigure,
          myLocalName,
        })
       }
@@ -57,9 +41,23 @@ class ConfigureHome extends Component {
 
   okHandler=(e)=>{
     e.preventDefault();
+    let {dispatch}=this.props;
     this.props.form.validateFields().then(
       values => {
-        console.log("entervalidateValues", values);
+        for(let i=0;i< values.LocaleConfigure.length;i++){
+        values.LocaleConfigure[i].key=i;
+        }
+        dispatch({
+          type: 'localeConfModel/saveLocaleConf',
+            payload: values,
+            callback: () => {
+              const { success, msg } = this.props.datachange;
+              if(success) {
+                message.success(msg);
+              }
+              else message.error(msg);
+            },
+        })
       }
     ).catch(errorInfo => {
       console.log(errorInfo);
@@ -67,6 +65,7 @@ class ConfigureHome extends Component {
   }
 
   render() {
+    let { dataLocal:{isHaveLocalName,myLocalName,LocaleConfigure} } = this.props;
     let { getFieldValue, getFieldDecorator } = this.props.form;
     console.log("localeConfigureRender",getFieldValue("isHaveLocalName"));
     return (
@@ -136,7 +135,9 @@ class ConfigureHome extends Component {
 }
 
 export default connect(({ localeConfModel }) => ({
+  dataLocal:localeConfModel.dataLocal.obj,
   dataMyLocal: localeConfModel.dataMyLocal.obj,//列表页数据源
+  datachange:localeConfModel.datachange,
   loading: localeConfModel.loading,
 }))(Form.create()(ConfigureHome))
 

@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { routerRedux, Route, Switch } from 'dva/router';
 import {router} from 'umi';
-import { Table, Row, Col, Card, Form, Input, Select, List,Spin,Descriptions,Button} from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, List,Spin,Descriptions,Button, message} from 'antd';
 import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import FooterToolbar from '../../components/FooterToolbar';
@@ -96,6 +96,12 @@ class ManageDetail extends Component {
     }
   }
 
+  eventHandler=(eventHandlerDispatch, routerParam)=>{
+ let {dispatch}=this.props;
+ console.log("entereventHandlerdispatch",eventHandlerDispatch);
+ message.success("操作成功");
+ this.returnHandler();
+  }
   returnHandler = () => {
     let {returnPath}=this.props;
       router.push({
@@ -104,7 +110,7 @@ class ManageDetail extends Component {
   }
 
     render() {
-        const{ SourceSetting=[],id,dispatchType,initparams,loading}=this.props;
+        const{ dataDetail={},SourceSetting=[],ButtonSetting=[],id,dispatchType,initparams,loading}=this.props;
         console.log("renderManageDetail",this.props);
         return (
             <PageHeaderWrapper>
@@ -116,6 +122,28 @@ class ManageDetail extends Component {
                })
              }
               <FooterToolbar> 
+                {
+                  ButtonSetting.map(item=>{
+                    let {existCondition={}}=item;
+                    let isexistCondition=Object.keys(existCondition).length>0?true:false;
+                    let data=isexistCondition?dataDetail[existCondition.infoName]:{};
+                    console.log("existCondition.field",existCondition.field,data);
+                  if(isexistCondition&&data&&data[existCondition.field]==existCondition.value) { 
+                    if(item.isRouterButton){
+                      let routerParam={};
+                      routerParam[item.routerFields]=data[item.routerFields];
+                     return <Link to={{ pathname: item.routerPath, query: routerParam }} style={{marginRight:12}}>
+                        <Button type="primary" >{item.buttonText}</Button >
+                    </Link>}else{
+                        let routerParam={};
+                        routerParam[item.routerFields]=data[item.routerFields];
+                    return  <Button type="primary" onClick={()=>this.eventHandler(item.eventHandlerDispatch, routerParam)} style={{marginRight:12}}>{item.buttonText}</Button >
+                    }
+                  }else{
+                    return <span/>
+                  }
+                  })
+                 }
                     <Button type="primary" onClick={this.returnHandler}>返回</Button >
                 </FooterToolbar>
             </PageHeaderWrapper>

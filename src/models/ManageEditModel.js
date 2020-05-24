@@ -1,5 +1,6 @@
 import {queryUserEdit,queryRoleEdit,queryDepartmentEdit,queryTypeConfigureEdit,queryCoopEdit,saveUserEdit,saveNewUser,saveRoleEdit,saveNewRole,
-  queryAuthTree,submitAuth,saveDepartmentEdit,saveNewDepartment,saveCoopEdit,saveNewCoop,saveNewTypeConfigure,saveTypeConfigureEdit,queryCoopNewProper} from '@/services/apiedit';
+  queryAuthTree,submitAuth,saveDepartmentEdit,saveNewDepartment,saveCoopEdit,saveNewCoop,saveNewTypeConfigure,saveTypeConfigureEdit,queryCoopNewProper,contractPay,SubmitToAudit,
+  saveAuditResult} from '@/services/apiedit';
 const ManageEditModel = {
   namespace: 'ManageEditModel',
   state: {
@@ -135,6 +136,23 @@ const ManageEditModel = {
       if (callback) callback();
     },
 
+    *SubmitToAudit({ payload, callback }, { call, put }) {
+      yield put({
+        type: 'dataLoading',
+        payload: true,
+      });
+      const response = yield call(SubmitToAudit, payload);
+      yield put({
+        type:'saveAuthTree',
+        payload: response,
+      });
+      yield put({
+        type:'dataLoading',
+        payload: false,
+      });
+      if (callback) callback();
+    },
+
     *fetchTypeConfigureEdit({payload,callback}, { call, put}) {
       yield put({
         type:'dataLoading',
@@ -148,6 +166,23 @@ const ManageEditModel = {
       });
       yield put({
         type:'dataLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *contractPay({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(contractPay, payload);
+      yield put({
+        type: 'messageCall',
+        payload: data,
+      });
+      yield put({
+        type:'dataSubmitLoading',
         payload:false,
       })
       if(callback) callback();
@@ -330,6 +365,23 @@ const ManageEditModel = {
         payload:true,
       })
       const data = yield call(submitAuth, payload);
+      yield put({
+        type: 'messageCall',
+        payload: data,
+      });
+      yield put({
+        type:'dataSubmitLoading',
+        payload:false,
+      })
+      if(callback) callback();
+    },
+
+    *saveAuditResult({ payload,callback }, { call,put}) {
+      yield put({
+        type:'dataSubmitLoading',
+        payload:true,
+      })
+      const data = yield call(saveAuditResult, payload);
       yield put({
         type: 'messageCall',
         payload: data,
