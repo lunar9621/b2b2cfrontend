@@ -111,27 +111,27 @@ saveHandler=(values)=>{
                 {
             name: "属性名称",
             field: "name",
-            component: "Input",
+            component: "输入框",
         },
         {
             name: "属性字段",
             field: "field",
-            component: "Input",
+            component: "输入框",
         },
         {
             name: "是否必填",
             field: "isRequired",
-            component: "Input",
+            component: "输入框",
         },
         {
             name: "默认值",
             field: "defaultValue",
-            component: "Input",
+            component: "输入框",
         },
         {
             name: "创建时间",
             field: "createDate",
-            component: "DatePicker",
+            component: "日期选择框",
         },
             {
                 name: "组件",

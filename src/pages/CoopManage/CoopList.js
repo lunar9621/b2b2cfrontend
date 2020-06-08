@@ -75,8 +75,9 @@ class CoopList extends PureComponent {
 
   render() {
     console.log("coopmanageprops",this.props);
+    let listSetting=this.props.listSetting?this.props.listSetting:{};
     let {columns=[],searchForm=[],isEdit=true,isDelete=true,isView=true,isRecover=true, initOption={},OtherOpeDispatch='',OtherOpeLabel='',
-      OtherRouteLabel='',OtherRoutePath=''}=this.props.listSetting;
+      OtherRouteLabel='',OtherRoutePath=''}=listSetting;
      
     let pathname=this.props.location.pathname;
     let dataSourceValue=pathname.slice(pathname.indexOf("=")+1,pathname.length);

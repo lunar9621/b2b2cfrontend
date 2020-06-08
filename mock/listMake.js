@@ -72,7 +72,8 @@ function getFakeCaptcha(req, res) {
     msg: "",
     obj: {
         rows: [{ID:"0001",name:"行政部",leadDep:"",manager:"主管李四",count:23,buildTime:"2020-01-01",children:[
-          {name:"部门1",leadDep:"",manager:"主管李无",count:23,buildTime:"2020-01-01"}
+          {name:"部门人事",leadDep:"行政部",manager:"主管李无",count:23,buildTime:"2020-01-01"},
+          {name:"部门市场",leadDep:"行政部",manager:"主管周陈",count:23,buildTime:"2020-01-01"}
         ]},
         {ID:"0002",name:"人事部",leadDep:"",manager:"主管张三",count:12,buildTime:"2020-01-01"}],
         pageSize: null,
@@ -83,6 +84,17 @@ function getFakeCaptcha(req, res) {
     '/api/listMake/queryListMakeSource':(req,res)=>{
       if(req.query.moduleID==3){
        res.send({ 
+        success:true,
+        msg:"成功",
+        obj:{
+            fieldValue:[{name:"coopName",type:"string"},{name:"creator",type:"string"},{name:"createDate",type:"Date"},{name:"status",type:"enum",options:[0,1]},{name:"address",type:"string"},
+            {name:"contacts",type:"string"},{name:"phone",type:"string"},{name:"coopID",type:"string"}],
+            otherOpe:[{index:0,name:"resetPWD",dispatchType:"ManageListModel/userManageResetPWD"}],
+            otherRoute:[],
+        },
+      });
+    }else{
+      res.send({ 
         success:true,
         msg:"成功",
         obj:{

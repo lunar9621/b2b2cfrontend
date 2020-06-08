@@ -11,7 +11,9 @@ class DepartmentDetail extends PureComponent {
 
   state = {  
     roleList:[],
-    detailSetting:[],
+    detailSetting:{moduleID:'',
+  SourceSetting:[],
+ButtonSetting:[]},
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -68,10 +70,10 @@ class DepartmentDetail extends PureComponent {
     //   });
     dispatch({
       type: 'detailMakeModel/fetchDetailSetting',
-      payload:3,
+      payload:2,
       callback:()=>{
         let {detailSetting}=this.props;
-        db.insertOrUpdate("DetailSetting",{moduleID:3},{setting:detailSetting});
+        db.insertOrUpdate("DetailSetting",{moduleID:2},{setting:detailSetting});
         this.setState({
           detailSetting,
         })     
@@ -81,7 +83,7 @@ class DepartmentDetail extends PureComponent {
 
 
   render() {
-    let {detailSetting:{SourceSetting,ButtonSetting}}=this.state;
+    let {SourceSetting=[],ButtonSetting=[]}=this.state.detailSetting;
     console.log("DepartmentDetailState",this.state);
     //     let SourceSetting =[{
     //         index: 0,

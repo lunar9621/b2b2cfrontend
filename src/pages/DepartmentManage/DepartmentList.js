@@ -116,7 +116,7 @@ class DepartmentList extends PureComponent {
         //render: val => <span>{val?val.fullName:""}</span>,
       },
     ];
-let isEdit=true,isDelete=true,isView=false,isRecover=false;
+let isEdit=true,isDelete=true,isView=true,isRecover=false;
 let initOption={};
    return ( <ManageList
               dispatchType="ManageListModel/fetchDepartmentList"

@@ -261,17 +261,14 @@ class ListMake extends Component {
                     />)
                   }
                 </FormItem>
-                {/* {
+                {
                   dataSource.otherOpe && dataSource.otherOpe.length > 0 ?
                     <div>
                       <FormItem
                         label="包含其他操作"
                       >
                         {
-                          getFieldDecorator('OtherOpeName', {
-                            rules: [{ message: '请选择' }],
-                            initialValue: initOtherOpeName,
-                          })(<Select
+                          getFieldDecorator('OtherOpeName')(<Select
                           >
                             {otherOpeOptions}
                           </Select>)
@@ -283,10 +280,7 @@ class ListMake extends Component {
                             label="包含其他操作名称"
                           >
                             {
-                              getFieldDecorator('OtherOpeLabel', {
-                                rules: [{ message: '请选择' }],
-                                initialValue: listSetting.otherOpeLabel,
-                              })(<Input />)
+                              getFieldDecorator('OtherOpeLabel')(<Input />)
                             }
                           </FormItem>
                           :
@@ -294,8 +288,8 @@ class ListMake extends Component {
                       }
                     </div>
                     : <div />
-                } */}
-                 {/* {
+                }
+                 {
                   dataSource.otherRoute && dataSource.otherRoute.length > 0 ?
                     <div>
                       <FormItem
@@ -317,10 +311,7 @@ class ListMake extends Component {
                             label="包含其他路由名称"
                           >
                             {
-                              getFieldDecorator('OtherRouteLabel', {
-                                rules: [{ message: '请选择' }],
-                                initialValue: listSetting.otherRouteLabel,
-                              })(<Input />)
+                              getFieldDecorator('OtherRouteLabel')(<Input />)
                             }
                           </FormItem>
                           :
@@ -328,7 +319,7 @@ class ListMake extends Component {
                       }
                     </div>
                     : <div />
-                } */}
+                }
               </Card>
 
               <FooterToolbar>

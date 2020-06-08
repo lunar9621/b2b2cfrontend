@@ -67,10 +67,18 @@ class ConfigureHome extends Component {
   render() {
     let { dataLocal:{isHaveLocalName,myLocalName,LocaleConfigure} } = this.props;
     let { getFieldValue, getFieldDecorator } = this.props.form;
-    console.log("localeConfigureRender",getFieldValue("isHaveLocalName"));
+    console.log("localeConfigureRender",getFieldValue("isHaveLocalName"),"window.localLanguage:",window.localStorage.locale);
+    console.log("this.state.initValue",this.state.initValue,); 
+    let lannow;
+    if(window.localStorage.locale=="zh-CN"){
+      lannow="zhCN";
+    }else if(window.localStorage.locale=="en-US"){
+      lannow="enUS";
+    }
+let initValue=this.state.initValue.length>0?this.state.initValue:["","","",""];
     return (
       <>
-        <PageHeaderWrapper content="请编辑某种语言进行配置">
+        <PageHeaderWrapper content={lannow=="zhCN"?initValue[0].zhCN:initValue[0].enUS}>
         <Card>
           <Form onSubmit={this.okHandler}>
           {this.state.myLocalName===''?
@@ -106,7 +114,7 @@ class ConfigureHome extends Component {
           }
           </FormItem>
           <FormItem
-          label="自定义语言名"
+          label={lannow=="zhCN"?initValue[1].zhCN:initValue[1].enUS}
         >
           {
             getFieldDecorator(`myLocalName`, {
@@ -118,7 +126,7 @@ class ConfigureHome extends Component {
         </div>
           }
         <FormItem
-        label="词汇配置"
+        label={lannow=="zhCN"?initValue[2].zhCN:initValue[2].enUS}
         >
           {getFieldDecorator(`LocaleConfigure`,{ initialValue: this.state.initValue,})
             (<LocaleConfTable myLocalName={getFieldValue("isHaveLocalName")=="true"?getFieldValue("myLocalName"):""}/>)}

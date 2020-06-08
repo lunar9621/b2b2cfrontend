@@ -22,7 +22,7 @@ class AvatarDropdown extends React.Component {
       return;
     }
   if(key==='SelfInfo'){
-      router.push(`/SelfInfo/View`);
+      router.push(`/SelfInfo`);
   }
   };
 
